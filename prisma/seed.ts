@@ -36,6 +36,49 @@ async function main() {
     await prisma.role.upsert({ where: { name }, update: {}, create: { name } });
   }
 
+  const permissions = [
+    { key: 'content.read', description: 'View content' },
+    { key: 'content.write', description: 'Create or edit content' },
+    { key: 'content.publish', description: 'Publish or unpublish content' },
+    { key: 'user.manage', description: 'Manage user accounts' },
+    { key: 'role.manage', description: 'Assign or revoke roles' },
+    { key: 'audit.read', description: 'View audit logs' },
+  ];
+
+  for (const permission of permissions) {
+    await prisma.permission.upsert({
+      where: { key: permission.key },
+      update: {},
+      create: permission,
+    });
+  }
+
+  const rolePermissionMap: Record<string, string[]> = {
+    learner: ['content.read'],
+    instructor: ['content.read', 'content.write'],
+    content_reviewer: ['content.read', 'content.write', 'content.publish'],
+    admin: [
+      'content.read',
+      'content.write',
+      'content.publish',
+      'user.manage',
+      'role.manage',
+      'audit.read',
+    ],
+  };
+
+  for (const [roleName, permissionKeys] of Object.entries(rolePermissionMap)) {
+    const role = await prisma.role.findUniqueOrThrow({ where: { name: roleName } });
+    for (const permissionKey of permissionKeys) {
+      const permission = await prisma.permission.findUniqueOrThrow({ where: { key: permissionKey } });
+      await prisma.rolePermission.upsert({
+        where: { roleId_permissionId: { roleId: role.id, permissionId: permission.id } },
+        update: {},
+        create: { roleId: role.id, permissionId: permission.id },
+      });
+    }
+  }
+
   const contentTypes = ['module', 'lesson', 'protocol', 'drug', 'clinical_case', 'quiz', 'video'];
   for (const key of contentTypes) {
     await prisma.contentType.upsert({ where: { key }, update: {}, create: { key, label: key } });
