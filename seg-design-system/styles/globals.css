@@ -15,13 +15,13 @@ body {
 :root[data-seg-theme='dark'] {
   --seg-canvas: #0B0F19;
   --seg-surface: rgba(30, 41, 59, 0.7);
-  --seg-primary: #0EA5E9;
+  --seg-primary: 14 165 233;
   --seg-primary-strong: #0EA5E9;
-  --seg-emergency: #EF4444;
+  --seg-emergency: 239 68 68;
   --seg-text-primary: #F8FAFC;
-  --seg-text-secondary: #94A3B8;
+  --seg-text-secondary: 148 163 184;
   --seg-border: rgba(148, 163, 184, 0.16);
-  --seg-warning: #F59E0B;
+  --seg-warning: 245 158 11;
   --seg-on-primary: #0B0F19;
   --seg-on-emergency: #0B0F19;
   --seg-shadow-sm: 0 1px 2px rgba(0,0,0,0.4);
@@ -32,13 +32,13 @@ body {
 :root[data-seg-theme='light'] {
   --seg-canvas: #F8FAFC;
   --seg-surface: #FFFFFF;
-  --seg-primary: #0284C7;
+  --seg-primary: 2 132 199;
   --seg-primary-strong: #0369A1;
-  --seg-emergency: #DC2626;
+  --seg-emergency: 220 38 38;
   --seg-text-primary: #0F172A;
-  --seg-text-secondary: #475569;
+  --seg-text-secondary: 71 85 105;
   --seg-border: rgba(15, 23, 42, 0.08);
-  --seg-warning: #D97706;
+  --seg-warning: 217 119 6;
   --seg-on-primary: #FFFFFF;
   --seg-on-emergency: #FFFFFF;
   --seg-shadow-sm: 0 1px 2px rgba(15,23,42,0.06);
