@@ -6,7 +6,7 @@ type ThemeContextValue = {
   theme: ColorTheme;
   setTheme: (theme: ColorTheme) => void;
   toggleTheme: () => void;
-  tokens: typeof colors.dark;
+  tokens: (typeof colors)[ColorTheme];
 };
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
