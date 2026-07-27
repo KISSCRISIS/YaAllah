@@ -1,0 +1,22 @@
+-- Placeholder for hand-authored RLS policy SQL to be appended into the
+-- first real Prisma-generated migration. Do NOT apply this file directly.
+--
+-- General rule: `ALTER TABLE ... ENABLE ROW LEVEL SECURITY;` must be run for
+-- every table below before any policy is added (deny-all default).
+
+-- profiles               -> TODO: own row select/update (auth.uid() = id); admin can select all
+-- roles                  -> TODO: admin-read only; no client writes
+-- permissions            -> TODO: admin-read only; no client writes
+-- role_permissions       -> TODO: admin-read only; no client writes
+-- user_roles             -> TODO: admin-read only; assignment happens via Prisma admin scripts, never client writes
+-- audit_logs             -> TODO: no client select or write at all; system-written only
+-- domains                -> TODO: authenticated read; no client writes
+-- tracks                 -> TODO: authenticated read; no client writes
+-- user_tracks            -> TODO: own row select; self-insert once at registration; update/delete admin-only
+-- content_types          -> TODO: authenticated read; no client writes
+-- categories             -> TODO: authenticated read; no client writes
+-- content                -> TODO: authenticated read of is_published = true rows only; write restricted to content_reviewer/admin
+-- content_versions       -> TODO: read restricted to content_reviewer/admin; insert-only, never updated/deleted
+-- content_prerequisites  -> TODO: authenticated read; write admin-only
+-- progress_status        -> TODO: authenticated read-only reference table
+-- user_content_progress  -> TODO: own row select/insert/update only

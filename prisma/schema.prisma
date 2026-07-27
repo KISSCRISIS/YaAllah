@@ -1,0 +1,256 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// NOTE: Supabase's `auth.users` table lives in the `auth` schema and is
+// managed by Supabase Auth, not by Prisma. It is intentionally NOT modeled
+// here. `profiles.id` has a foreign key to `auth.users.id` created via
+// hand-authored raw SQL in the migration (see prisma/rls-and-triggers/
+// and prisma/migrations/README.md), not as a Prisma-native relation.
+//
+// Prisma in this project is restricted to schema/migrations/seed/admin
+// scripts only. All user-facing reads/writes go through the Supabase
+// client (supabase-js) so Postgres Row Level Security is enforced per
+// request. See prisma/README.md.
+
+model Profile {
+  id        String   @id
+  fullName  String?  @map("full_name")
+  avatarUrl String?  @map("avatar_url")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  userRoles       UserRole[]
+  userTracks      UserTrack[]
+  auditLogs       AuditLog[]             @relation("AuditLogActor")
+  createdContent  Content[]              @relation("ContentCreatedBy")
+  createdVersions ContentVersion[]       @relation("ContentVersionCreatedBy")
+  contentProgress UserContentProgress[]
+
+  @@map("profiles")
+}
+
+model Role {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+
+  rolePermissions RolePermission[]
+  userRoles       UserRole[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id          Int     @id @default(autoincrement())
+  key         String  @unique
+  description String?
+
+  rolePermissions RolePermission[]
+
+  @@map("permissions")
+}
+
+model RolePermission {
+  roleId       Int @map("role_id")
+  permissionId Int @map("permission_id")
+
+  role       Role       @relation(fields: [roleId], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id])
+
+  @@id([roleId, permissionId])
+  @@index([permissionId])
+  @@map("role_permissions")
+}
+
+model UserRole {
+  id     Int     @id @default(autoincrement())
+  userId String  @map("user_id")
+  roleId Int     @map("role_id")
+  orgId  String? @map("org_id") // reserved for future Organization FK; deferred table not yet created
+
+  user Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role    @relation(fields: [roleId], references: [id])
+
+  @@unique([userId, roleId, orgId])
+  @@index([userId])
+  @@map("user_roles")
+}
+
+model AuditLog {
+  id          Int      @id @default(autoincrement())
+  actorUserId String?  @map("actor_user_id")
+  action      String
+  entityType  String   @map("entity_type")
+  entityId    String   @map("entity_id")
+  metadata    Json?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  actor Profile? @relation("AuditLogActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([entityType, entityId])
+  @@map("audit_logs")
+}
+
+model Domain {
+  id          Int     @id @default(autoincrement())
+  name        String
+  slug        String  @unique
+  description String?
+
+  tracks     Track[]
+  categories Category[]
+  content    Content[]
+
+  @@map("domains")
+}
+
+model Track {
+  id          Int     @id @default(autoincrement())
+  domainId    Int     @map("domain_id")
+  fullLabel   String  @map("full_label")
+  shortLabel  String  @map("short_label")
+  slug        String  @unique
+  description String?
+  sortOrder   Int     @default(0) @map("sort_order")
+
+  domain     Domain      @relation(fields: [domainId], references: [id])
+  userTracks UserTrack[]
+
+  @@index([domainId])
+  @@map("tracks")
+}
+
+model UserTrack {
+  id        Int       @id @default(autoincrement())
+  userId    String    @map("user_id")
+  trackId   Int       @map("track_id")
+  isPrimary Boolean   @default(false) @map("is_primary")
+  status    String    @default("active")
+  startedAt DateTime  @default(now()) @map("started_at")
+  endedAt   DateTime? @map("ended_at")
+
+  user  Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  track Track   @relation(fields: [trackId], references: [id])
+
+  @@index([userId])
+  @@index([trackId])
+  @@map("user_tracks")
+}
+
+model ContentType {
+  id    Int    @id @default(autoincrement())
+  key   String @unique
+  label String
+
+  content Content[]
+
+  @@map("content_types")
+}
+
+model Category {
+  id       Int    @id @default(autoincrement())
+  domainId Int    @map("domain_id")
+  name     String
+  slug     String @unique
+
+  domain  Domain    @relation(fields: [domainId], references: [id])
+  content Content[]
+
+  @@index([domainId])
+  @@map("categories")
+}
+
+model Content {
+  id            Int      @id @default(autoincrement())
+  contentTypeId Int      @map("content_type_id")
+  categoryId    Int?     @map("category_id")
+  domainId      Int      @map("domain_id")
+  title         String
+  description   String?
+  body          Json?
+  mediaPath     String?  @map("media_path")
+  isPublished   Boolean  @default(false) @map("is_published")
+  createdBy     String?  @map("created_by")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  contentType ContentType @relation(fields: [contentTypeId], references: [id])
+  category    Category?   @relation(fields: [categoryId], references: [id])
+  domain      Domain      @relation(fields: [domainId], references: [id])
+  creator     Profile?    @relation("ContentCreatedBy", fields: [createdBy], references: [id], onDelete: SetNull)
+
+  versions        ContentVersion[]
+  progress        UserContentProgress[]
+  gatedBy         ContentPrerequisite[] @relation("ContentGated")
+  prerequisiteFor ContentPrerequisite[] @relation("ContentPrerequisite")
+
+  @@index([contentTypeId])
+  @@index([categoryId])
+  @@index([domainId])
+  @@map("content")
+}
+
+model ContentVersion {
+  id            Int      @id @default(autoincrement())
+  contentId     Int      @map("content_id")
+  versionNumber Int      @map("version_number")
+  bodySnapshot  Json     @map("body_snapshot")
+  createdBy     String?  @map("created_by")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  content Content  @relation(fields: [contentId], references: [id])
+  creator Profile? @relation("ContentVersionCreatedBy", fields: [createdBy], references: [id], onDelete: SetNull)
+
+  @@unique([contentId, versionNumber])
+  @@index([contentId])
+  @@map("content_versions")
+}
+
+model ContentPrerequisite {
+  id                    Int @id @default(autoincrement())
+  contentId             Int @map("content_id")
+  prerequisiteContentId Int @map("prerequisite_content_id")
+
+  content      Content @relation("ContentGated", fields: [contentId], references: [id])
+  prerequisite Content @relation("ContentPrerequisite", fields: [prerequisiteContentId], references: [id])
+
+  @@unique([contentId, prerequisiteContentId])
+  @@index([prerequisiteContentId])
+  @@map("content_prerequisites")
+}
+
+model ProgressStatus {
+  id    Int    @id @default(autoincrement())
+  key   String @unique
+  label String
+
+  progress UserContentProgress[]
+
+  @@map("progress_status")
+}
+
+model UserContentProgress {
+  id               Int       @id @default(autoincrement())
+  userId           String    @map("user_id")
+  contentId        Int       @map("content_id")
+  statusId         Int       @map("status_id")
+  progressPercent  Int       @default(0) @map("progress_percent")
+  startedAt        DateTime? @map("started_at")
+  completedAt      DateTime? @map("completed_at")
+  lastInteractedAt DateTime? @map("last_interacted_at")
+
+  user    Profile        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content Content        @relation(fields: [contentId], references: [id])
+  status  ProgressStatus @relation(fields: [statusId], references: [id])
+
+  @@unique([userId, contentId])
+  @@index([userId])
+  @@map("user_content_progress")
+}
