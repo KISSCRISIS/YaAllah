@@ -9,7 +9,7 @@ const config: Config = {
   darkMode: ['class', '[data-seg-theme="dark"]'],
   theme: {
     extend: {
-      ...(segTailwindTokens.extend ?? {}),
+      ...(segTailwindTokens?.extend ?? {}),
     },
   },
   plugins: [],
