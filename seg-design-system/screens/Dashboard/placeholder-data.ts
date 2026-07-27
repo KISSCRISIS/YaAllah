@@ -1,3 +1,7 @@
+import { segTracks } from '@/lib/tracks';
+
+const currentTrack = segTracks.find((track) => track.id === 'ems_paramedic')!;
+
 export const dashboardPlaceholderData = {
   learningProgress: { value: 62 },
   recentActivity: [
@@ -9,5 +13,5 @@ export const dashboardPlaceholderData = {
     { id: 'n1', title: 'New protocol update available', meta: 'Cardiac Arrest Pathway v2' },
     { id: 'n2', title: 'Practice session reminder', meta: 'Scheduled for today' },
   ],
-  profile: { name: 'Jordan Rivera', role: 'Paramedic' },
+  profile: { name: 'Jordan Rivera', role: currentTrack.shortLabel },
 };

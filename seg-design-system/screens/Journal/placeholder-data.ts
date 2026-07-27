@@ -1,4 +1,8 @@
+import { segTracks } from '@/lib/tracks';
+
 type TimelineState = 'completed' | 'current' | 'upcoming';
+
+const currentTrack = segTracks.find((track) => track.id === 'ems_paramedic')!;
 
 export const journalPlaceholderData: {
   header: { heading: string; subheading: string };
@@ -11,7 +15,7 @@ export const journalPlaceholderData: {
     heading: 'Professional Reflection Journal',
     subheading: 'Document your clinical learning and professional growth.',
   },
-  currentRoleContext: 'Paramedic',
+  currentRoleContext: currentTrack.shortLabel,
   overview: { totalEntries: 3, entriesThisMonth: 2 },
   timeline: [
     { id: 'j1', title: 'Reflected on Trauma Assessment Protocol', meta: 'Jul 20, 2026', state: 'completed' },

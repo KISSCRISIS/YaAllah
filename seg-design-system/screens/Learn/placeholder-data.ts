@@ -1,4 +1,8 @@
+import { segTracks } from '@/lib/tracks';
+
 type ModuleStatus = 'completed' | 'in-progress' | 'not-started';
+
+const currentTrack = segTracks.find((track) => track.id === 'ems_paramedic')!;
 
 export const learnPlaceholderData: {
   header: { heading: string; subheading: string };
@@ -11,7 +15,7 @@ export const learnPlaceholderData: {
     heading: 'Clinical Education Center',
     subheading: 'Structured learning modules for emergency medicine practice.',
   },
-  currentRoleContext: 'Paramedic',
+  currentRoleContext: currentTrack.shortLabel,
   overview: { modulesCompleted: 4, totalModules: 9, overallProgress: 46 },
   modules: [
     { id: 'm1', title: 'Airway Management Fundamentals', description: 'Core techniques for airway control.', category: 'Core Emergency Skills', progress: 100, status: 'completed' },
