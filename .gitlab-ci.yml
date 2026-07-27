@@ -1,0 +1,51 @@
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+
+default:
+  image: node:20
+
+stages:
+  - install
+  - quality
+  - build
+
+cache:
+  key:
+    files:
+      - package-lock.json
+  paths:
+    - node_modules/
+
+install:
+  stage: install
+  script:
+    - npm ci
+    - npx prisma generate
+  artifacts:
+    expire_in: 1 hour
+    paths:
+      - node_modules/
+
+lint:
+  stage: quality
+  needs:
+    - install
+  script:
+    - npm run lint
+
+typecheck:
+  stage: quality
+  needs:
+    - install
+  script:
+    - npm run typecheck
+
+build:
+  stage: build
+  needs:
+    - lint
+    - typecheck
+  script:
+    - npm run build
