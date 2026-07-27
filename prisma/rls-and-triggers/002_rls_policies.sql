@@ -68,9 +68,11 @@ CREATE POLICY categories_select_authenticated ON public.categories
   FOR SELECT USING (auth.role() = 'authenticated');
 
 -- content: authenticated read of published rows only (reviewers/admins
--- can read drafts too); write restricted to content_reviewer/admin
--- NOTE (risk): the write policy uses FOR ALL, which includes DELETE.
--- Confirm this is intended before applying.
+-- can read drafts too); INSERT/UPDATE restricted to content_reviewer/
+-- admin. No DELETE policy is defined, so DELETE is denied by default
+-- for every client role (RLS deny-all). If an explicit admin-only
+-- delete capability is required later, add a dedicated DELETE policy
+-- at that time — not added now, per review decision.
 ALTER TABLE public.content ENABLE ROW LEVEL SECURITY;
 CREATE POLICY content_select_published ON public.content
   FOR SELECT USING (
@@ -78,8 +80,10 @@ CREATE POLICY content_select_published ON public.content
     OR public.has_role('content_reviewer')
     OR public.has_role('admin')
   );
-CREATE POLICY content_write_reviewer_admin ON public.content
-  FOR ALL USING (public.has_role('content_reviewer') OR public.has_role('admin'))
+CREATE POLICY content_insert_reviewer_admin ON public.content
+  FOR INSERT WITH CHECK (public.has_role('content_reviewer') OR public.has_role('admin'));
+CREATE POLICY content_update_reviewer_admin ON public.content
+  FOR UPDATE USING (public.has_role('content_reviewer') OR public.has_role('admin'))
   WITH CHECK (public.has_role('content_reviewer') OR public.has_role('admin'));
 
 -- content_versions: read restricted to content_reviewer/admin;

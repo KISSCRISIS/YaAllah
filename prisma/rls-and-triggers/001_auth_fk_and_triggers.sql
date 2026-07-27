@@ -14,11 +14,14 @@ ALTER TABLE public.profiles
 
 -- 2. Auto-create a profiles row whenever a new row is inserted into
 --    auth.users, so every authenticated user always has a profile.
+-- search_path pinned to '' (empty): the function body already
+-- fully-qualifies every reference (public.profiles), so an empty
+-- search_path removes any reliance on schema resolution order.
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS trigger
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public
+SET search_path = ''
 AS $$
 BEGIN
   INSERT INTO public.profiles (id, full_name, avatar_url)
@@ -44,11 +47,14 @@ CREATE TRIGGER on_auth_user_created
 --    content.created_by (the original author field), not a distinct
 --    "last editor". The schema has no updated_by column; adding one is
 --    a future schema change, out of scope here.
+-- search_path pinned to '' (empty): the function body already
+-- fully-qualifies every reference (public.content_versions), so an
+-- empty search_path removes any reliance on schema resolution order.
 CREATE OR REPLACE FUNCTION public.handle_content_version_snapshot()
 RETURNS trigger
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public
+SET search_path = ''
 AS $$
 DECLARE
   next_version_number integer;
