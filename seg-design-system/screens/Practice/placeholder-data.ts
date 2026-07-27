@@ -1,4 +1,8 @@
+import { segTracks } from '@/lib/tracks';
+
 type PracticeModuleStatus = 'available' | 'locked' | 'completed';
+
+const currentTrack = segTracks.find((track) => track.id === 'ems_paramedic')!;
 
 export const practicePlaceholderData: {
   header: { heading: string; subheading: string };
@@ -11,7 +15,7 @@ export const practicePlaceholderData: {
     heading: 'Clinical Practice Simulation',
     subheading: 'Apply your training in realistic emergency scenarios.',
   },
-  currentRoleContext: 'Paramedic',
+  currentRoleContext: currentTrack.shortLabel,
   overview: { availableModules: 5, sessionsCompleted: 2, averageProgress: 30 },
   quickCategories: ['Airway', 'Cardiac', 'Trauma', 'Pediatric'],
   modules: [

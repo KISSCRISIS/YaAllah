@@ -1,6 +1,10 @@
+import { segTracks } from '@/lib/tracks';
+
 type ProtocolStatus = 'not-started' | 'in-progress' | 'completed';
 type TimelineState = 'completed' | 'current' | 'upcoming';
 type BadgeTone = 'primary' | 'warning' | 'neutral';
+
+const currentTrack = segTracks.find((track) => track.id === 'ems_paramedic')!;
 
 export const pathwayPlaceholderData: {
   header: { heading: string; subheading: string };
@@ -14,7 +18,7 @@ export const pathwayPlaceholderData: {
     heading: 'Clinical Learning Pathway',
     subheading: 'Progress through structured emergency medicine protocols.',
   },
-  currentRoleContext: 'Paramedic',
+  currentRoleContext: currentTrack.shortLabel,
   overallProgress: 48,
   summary: [
     { id: 'completed', label: 'Completed', count: 2, tone: 'primary' },

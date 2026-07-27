@@ -1,4 +1,8 @@
+import { segTracks } from '@/lib/tracks';
+
 type DrugStatus = 'available' | 'caution' | 'restricted';
+
+const currentTrack = segTracks.find((track) => track.id === 'ems_paramedic')!;
 
 export const drugReferencePlaceholderData: {
   header: { heading: string; subheading: string };
@@ -10,7 +14,7 @@ export const drugReferencePlaceholderData: {
     heading: 'Clinical Drug Reference',
     subheading: 'Quick access to emergency medication reference information.',
   },
-  currentRoleContext: 'Paramedic',
+  currentRoleContext: currentTrack.shortLabel,
   overview: { totalDrugs: 6, categories: ['Analgesics', 'Cardiac', 'Respiratory', 'Sedatives'] },
   drugs: [
     { id: 'd1', name: 'Epinephrine', category: 'Cardiac', status: 'available', statusLabel: 'Available', description: 'Placeholder description for Epinephrine.' },
