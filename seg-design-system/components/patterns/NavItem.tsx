@@ -1,4 +1,5 @@
 import { forwardRef, type AnchorHTMLAttributes } from 'react';
+import Link from 'next/link';
 import { cn } from '../utils/cn';
 import { IconPlaceholder } from '../primitives/IconPlaceholder';
 
@@ -11,11 +12,12 @@ export interface NavItemProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 }
 
 export const NavItem = forwardRef<HTMLAnchorElement, NavItemProps>(function NavItem(
-  { label, iconLabel, active, className, ...props }, ref
+  { label, iconLabel, active, className, href, ...props }, ref
 ) {
   return (
-    <a
+    <Link
       ref={ref}
+      href={href ?? '#'}
       aria-current={active ? 'page' : undefined}
       className={cn(
         'flex items-center gap-3 rounded-seg-md px-3 py-2 text-sm font-medium transition-colors duration-seg-fast ease-seg-standard',
@@ -27,6 +29,6 @@ export const NavItem = forwardRef<HTMLAnchorElement, NavItemProps>(function NavI
     >
       <IconPlaceholder label={iconLabel} />
       <span className="hidden md:inline">{label}</span>
-    </a>
+    </Link>
   );
 });
