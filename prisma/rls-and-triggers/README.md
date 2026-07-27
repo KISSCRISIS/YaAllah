@@ -10,9 +10,17 @@ migration from `prisma/schema.prisma`, the SQL in this folder must be
 appended to that generated `migration.sql` file before it is applied, per
 `prisma/migrations/README.md`.
 
-Files:
+Files (applied in this order when appended to the real migration):
+- `000_helper_functions.sql` — `public.has_role()` SECURITY DEFINER helper
+  used by the RLS policies below.
 - `001_auth_fk_and_triggers.sql` — foreign key from `profiles.id` to
-  Supabase's `auth.users.id`, plus trigger placeholders (auto-create profile
-  on signup, auto-version content on update).
-- `002_rls_policies.sql` — table-by-table RLS policy plan for every MVP
-  table.
+  Supabase's `auth.users.id`, the `handle_new_user` trigger (auto-create
+  profile on signup), and the `content_versions` auto-snapshot trigger.
+- `002_rls_policies.sql` — `ENABLE ROW LEVEL SECURITY` and initial policies
+  for every MVP table.
+
+Status: all three files now contain real, reviewed SQL (no more TODOs).
+None of it has been executed against any database or validated by the
+Prisma CLI — treat it as a draft until run through
+`npx prisma migrate dev --create-only` (or applied to a disposable/staging
+Supabase project) and manually tested.
