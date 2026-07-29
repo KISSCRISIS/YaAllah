@@ -19,3 +19,7 @@
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local Prisma migration baseline
+/prisma/migrations/20260727201900_init/
+/prisma/migrations/migration_lock.toml
