@@ -6,5 +6,6 @@ export * from './ProgressBar';
 export * from './Divider';
 export * from './Skeleton';
 export * from './IconPlaceholder';
+export * from './Icon';
 export * from './Input';
 export * from './Toggle';

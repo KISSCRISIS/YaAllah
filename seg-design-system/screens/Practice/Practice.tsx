@@ -1,10 +1,11 @@
 'use client';
 import dynamic from 'next/dynamic';
+import { Brain, PlayCircle } from 'lucide-react';
 import { ScreenLayout } from '../../layouts/ScreenLayout';
 import { GlassPanel } from '../../components/primitives/GlassPanel';
 import { Button } from '../../components/primitives/Button';
 import { Badge } from '../../components/primitives/Badge';
-import { IconPlaceholder } from '../../components/primitives/IconPlaceholder';
+import { Icon } from '../../components/primitives/Icon';
 import { StatCard } from '../../components/patterns/StatCard';
 import { HeroAtmosphereStatic } from '../../experience/3d/HeroAtmosphereStatic';
 import { practicePlaceholderData as data } from './placeholder-data';
@@ -24,7 +25,7 @@ export function Practice() {
         <HeroAtmosphere className="absolute inset-0" />
         <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
-            <IconPlaceholder label="Practice" size="lg" />
+            <Icon icon={Brain} aria-label="Practice" size="lg" />
             <div>
               <h2 className="text-lg font-semibold text-seg-text-primary">{data.header.heading}</h2>
               <p className="text-sm text-seg-text-secondary">{data.header.subheading}</p>
@@ -39,7 +40,7 @@ export function Practice() {
       <StatCard label="Average progress" value={`${data.overview.averageProgress}%`} iconLabel="Average progress" tone="primary" />
 
       <GlassPanel elevated className="col-span-1 flex flex-col items-center gap-3 py-10 text-center sm:col-span-2 lg:col-span-3">
-        <IconPlaceholder label="No active session" size="lg" />
+        <Icon icon={PlayCircle} aria-label="No active session" size="lg" />
         <p className="text-sm font-medium text-seg-text-primary">No active training session</p>
         <p className="text-sm text-seg-text-secondary">Session behavior is not yet implemented.</p>
         <Button variant="outline" disabled>Start Session</Button>

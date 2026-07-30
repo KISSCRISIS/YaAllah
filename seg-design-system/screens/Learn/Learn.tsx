@@ -1,10 +1,11 @@
 'use client';
 import dynamic from 'next/dynamic';
+import { GraduationCap } from 'lucide-react';
 import { ScreenLayout } from '../../layouts/ScreenLayout';
 import { GlassPanel } from '../../components/primitives/GlassPanel';
 import { ProgressBar } from '../../components/primitives/ProgressBar';
 import { Badge } from '../../components/primitives/Badge';
-import { IconPlaceholder } from '../../components/primitives/IconPlaceholder';
+import { Icon } from '../../components/primitives/Icon';
 import { StatCard } from '../../components/patterns/StatCard';
 import { ListItem } from '../../components/patterns/ListItem';
 import { HeroAtmosphereStatic } from '../../experience/3d/HeroAtmosphereStatic';
@@ -27,7 +28,7 @@ export function Learn() {
         <HeroAtmosphere className="absolute inset-0" />
         <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
-            <IconPlaceholder label="Learn" size="lg" />
+            <Icon icon={GraduationCap} aria-label="Learn" size="lg" />
             <div>
               <h2 className="text-lg font-semibold text-seg-text-primary">{data.header.heading}</h2>
               <p className="text-sm text-seg-text-secondary">{data.header.subheading}</p>

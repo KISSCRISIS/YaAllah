@@ -1,11 +1,12 @@
 'use client';
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
+import { Pill, Search } from 'lucide-react';
 import { ScreenLayout } from '../../layouts/ScreenLayout';
 import { GlassPanel } from '../../components/primitives/GlassPanel';
 import { Input } from '../../components/primitives/Input';
 import { Badge } from '../../components/primitives/Badge';
-import { IconPlaceholder } from '../../components/primitives/IconPlaceholder';
+import { Icon } from '../../components/primitives/Icon';
 import { DrugCard } from '../../components/patterns/DrugCard';
 import { Modal } from '../../components/patterns/Modal';
 import { StatusIndicator } from '../../components/patterns/StatusIndicator';
@@ -27,7 +28,7 @@ export function DrugReference() {
         <HeroAtmosphere className="absolute inset-0" />
         <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
-            <IconPlaceholder label="Drug Reference" size="lg" />
+            <Icon icon={Pill} aria-label="Drug Reference" size="lg" />
             <div>
               <h2 className="text-lg font-semibold text-seg-text-primary">{data.header.heading}</h2>
               <p className="text-sm text-seg-text-secondary">{data.header.subheading}</p>
@@ -39,7 +40,7 @@ export function DrugReference() {
 
       <GlassPanel className="col-span-1 flex flex-col gap-3 sm:col-span-2 lg:col-span-3">
         <div className="flex items-center gap-2">
-          <IconPlaceholder label="Search" />
+          <Icon icon={Search} aria-label="Search" />
           <Input placeholder="Search drug reference..." aria-label="Search drug reference" disabled className="flex-1" />
         </div>
         <div className="flex flex-wrap items-center justify-between gap-2">

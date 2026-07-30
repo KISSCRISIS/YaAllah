@@ -1,11 +1,12 @@
 'use client';
 import dynamic from 'next/dynamic';
+import { Siren } from 'lucide-react';
 import { ScreenLayout } from '../../layouts/ScreenLayout';
 import { GlassPanel } from '../../components/primitives/GlassPanel';
 import { Button } from '../../components/primitives/Button';
 import { Avatar } from '../../components/primitives/Avatar';
 import { Badge } from '../../components/primitives/Badge';
-import { IconPlaceholder } from '../../components/primitives/IconPlaceholder';
+import { Icon } from '../../components/primitives/Icon';
 import { StatCard } from '../../components/patterns/StatCard';
 import { ListItem } from '../../components/patterns/ListItem';
 import { HeroAtmosphereStatic } from '../../experience/3d/HeroAtmosphereStatic';
@@ -41,7 +42,7 @@ export function Dashboard() {
 
       <GlassPanel elevated className="col-span-1 flex flex-col items-start gap-3 sm:col-span-2 lg:col-span-3">
         <div className="flex items-center gap-2">
-          <IconPlaceholder label="Emergency" />
+          <Icon icon={Siren} aria-label="Emergency" />
           <h2 className="text-sm font-semibold text-seg-text-primary">Emergency Access</h2>
         </div>
         <p className="text-sm text-seg-text-secondary">Immediate access to critical emergency protocols.</p>

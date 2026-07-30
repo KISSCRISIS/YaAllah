@@ -1,4 +1,4 @@
-import { forwardRef, type AnchorHTMLAttributes } from 'react';
+import { forwardRef, type AnchorHTMLAttributes, type ReactNode } from 'react';
 import Link from 'next/link';
 import { cn } from '../utils/cn';
 import { IconPlaceholder } from '../primitives/IconPlaceholder';
@@ -7,12 +7,15 @@ import { IconPlaceholder } from '../primitives/IconPlaceholder';
 // integration time — this component has no route or auth awareness.
 export interface NavItemProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   label: string;
+  /** Required — used as aria-label fallback when no custom icon is supplied */
   iconLabel: string;
   active?: boolean;
+  /** Optional — custom icon (e.g. <Icon icon={Pill} aria-label="Drug Reference" />). Falls back to IconPlaceholder. */
+  icon?: ReactNode;
 }
 
 export const NavItem = forwardRef<HTMLAnchorElement, NavItemProps>(function NavItem(
-  { label, iconLabel, active, className, href, ...props }, ref
+  { label, iconLabel, active, className, href, icon, ...props }, ref
 ) {
   return (
     <Link
@@ -27,7 +30,7 @@ export const NavItem = forwardRef<HTMLAnchorElement, NavItemProps>(function NavI
       )}
       {...props}
     >
-      <IconPlaceholder label={iconLabel} />
+      {icon ?? <IconPlaceholder label={iconLabel} />}
       <span className="hidden md:inline">{label}</span>
     </Link>
   );

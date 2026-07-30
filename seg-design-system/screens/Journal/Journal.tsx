@@ -1,12 +1,13 @@
 'use client';
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
+import { BookOpen, FileText } from 'lucide-react';
 import { ScreenLayout } from '../../layouts/ScreenLayout';
 import { GlassPanel } from '../../components/primitives/GlassPanel';
 import { Button } from '../../components/primitives/Button';
 import { Badge } from '../../components/primitives/Badge';
 import { Input } from '../../components/primitives/Input';
-import { IconPlaceholder } from '../../components/primitives/IconPlaceholder';
+import { Icon } from '../../components/primitives/Icon';
 import { StatCard } from '../../components/patterns/StatCard';
 import { Timeline } from '../../components/patterns/Timeline';
 import { EmptyState } from '../../components/patterns/EmptyState';
@@ -32,7 +33,7 @@ export function Journal() {
         <HeroAtmosphere className="absolute inset-0" />
         <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
-            <IconPlaceholder label="Journal" size="lg" />
+            <Icon icon={BookOpen} aria-label="Journal" size="lg" />
             <div>
               <h2 className="text-lg font-semibold text-seg-text-primary">{data.header.heading}</h2>
               <p className="text-sm text-seg-text-secondary">{data.header.subheading}</p>
@@ -57,7 +58,7 @@ export function Journal() {
             {data.entries.map((e) => (
               <GlassPanel key={e.id} className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
-                  <IconPlaceholder label="Journal entry" />
+                  <Icon icon={FileText} aria-label="Journal entry" />
                   <p className="text-xs text-seg-text-secondary">{e.meta}</p>
                 </div>
                 <p className="text-sm font-semibold text-seg-text-primary">{e.title}</p>
