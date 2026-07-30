@@ -1,28 +1,29 @@
-# Integration Guide (SEG Design Implementation Package v1.0)
+# Integration Status (SEG Design System v1.0)
 
-## Package Structure
-tokens → theme/direction providers → primitives → patterns → layouts → experience → screens
+## Status: INTEGRATED
 
-## Integration Order
-1. Merge `styles/tailwind.config.tokens.ts` extend into SEG's tailwind config
-2. Add `styles/globals.css` variables
-3. Copy `theme/` and wrap app root with ThemeProvider + DirectionProvider
-4. Copy `components/primitives` (no dependencies on app code)
-5. Copy `components/patterns` (depends only on primitives)
-6. Copy `layouts` (depends only on patterns/primitives)
-7. Copy `experience/` (isolated, lazy-loaded, no dependencies on screens)
-8. Adapt `screens` to real data sources (currently placeholder content)
+The design system is fully wired into the SEG application. The manual integration
+steps described in the original v1.0 guide have been completed.
 
-## Files Copyable As-Is
-tokens/*, components/primitives/*, components/utils/cn.ts, experience/*
+## Completed
 
-## Files Requiring Adaptation
-screens/* (placeholder data → real data, role context → real auth/session),
-layouts/AppShell.tsx (nav items → real routes via next/link + usePathname)
+1. `styles/tailwind.config.tokens.ts` — merged into SEG tailwind config ✅
+2. `styles/globals.css` — CSS variables added ✅
+3. `theme/` — ThemeProvider + DirectionProvider wrap app root (`app/layout.tsx`) ✅
+4. `components/primitives/` — 11 components imported via `@/seg-design-system/...` ✅
+5. `components/patterns/` — 13 components imported via `@/seg-design-system/...` ✅
+6. `layouts/` — AppShell + ScreenLayout used in all 6 app screens ✅
+7. `experience/` — HeroAtmosphere lazy-loaded via `next/dynamic({ssr:false})` ✅
 
-## Known Risks
-- Tailwind class name collisions if SEG already defines `seg-*` tokens
-- RTL logical properties (`ps-`, `-start-`) require Tailwind logical-properties support (v3.3+)
-- NavItem renders a plain `<a>`, not `next/link` — needs adaptation for SPA navigation
+## Remaining
+
+8. `screens/` — adapt to real data sources (currently placeholder content)
+9. `screens/` — wire role context to real auth/session
+
+## Current Architecture Notes
+
+- Navigation: `app/(app)/_components/SidebarNav.tsx` renders 6 NavItems using `next/link` Link
+  component with `usePathname()` active-state detection
 - All 8 screens are Client Components due to `next/dynamic({ssr:false})` for HeroAtmosphere
-- No routes, package.json, or build config are included in this package by design
+- No routes, package.json, or build config are included in the design system by design —
+  these belong to the application layer
