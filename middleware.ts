@@ -27,8 +27,9 @@ function isProtectedPath(pathname: string): boolean {
 }
 
 export async function middleware(request: NextRequest) {
-  // Clone the response so cookie mutations survive redirects.
-  let response = NextResponse.next({ request });
+  // Base response — receives all cookie mutations during session refresh.
+  // Redirect responses inherit cookies from this base so no refresh is lost.
+  const response = NextResponse.next({ request });
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -62,7 +63,13 @@ export async function middleware(request: NextRequest) {
   if (user && pathname === '/login') {
     const url = request.nextUrl.clone();
     url.pathname = '/dashboard';
-    return NextResponse.redirect(url);
+    const redirectResponse = NextResponse.redirect(url);
+    // Propagate refreshed cookies from the base response so the
+    // redirect does not drop a session that was just renewed.
+    response.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, cookie);
+    });
+    return redirectResponse;
   }
 
   // ---------------------------------------------------------------
@@ -71,7 +78,13 @@ export async function middleware(request: NextRequest) {
   if (!user && isProtectedPath(pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';
-    return NextResponse.redirect(url);
+    const redirectResponse = NextResponse.redirect(url);
+    // Propagate refreshed cookies from the base response so the
+    // redirect does not drop a session that was just renewed.
+    response.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, cookie);
+    });
+    return redirectResponse;
   }
 
   // ---------------------------------------------------------------
