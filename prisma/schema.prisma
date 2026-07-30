@@ -1,256 +1,742 @@
+// =============================================================================
+// SEG Prisma Schema — UUID Edition
+// =============================================================================
+// SEG Phase 0.3A-13 — Auth Boundary Hardened
+//
+// ⚠️  GOVERNANCE — READ BEFORE MODIFYING
+// ─────────────────────────────────────────────────────────────────
+// • Prisma OWNS:     public.* (16 tables — schema, migrations, seed)
+// • Supabase OWNS:   auth.*   (managed exclusively by Supabase Auth)
+// • BOUNDARY:        profiles.id → auth.users.id (FK, READ-ONLY)
+//
+// The `users` model below is a REFLECTION ONLY of auth.users.
+// It exists solely so Prisma can understand the FK relationship
+// with public.profiles.  Do NOT use `prisma.users` for writes
+// under any circumstances — Supabase Auth is the single writer.
+//
+// ALL other auth.* models and enums are @@ignore'd.
+// Removing @@ignore from any auth model requires governance approval.
+// =============================================================================
+
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
 }
 
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
+  schemas   = ["auth", "public"]
 }
 
-// NOTE: Supabase's `auth.users` table lives in the `auth` schema and is
-// managed by Supabase Auth, not by Prisma. It is intentionally NOT modeled
-// here. `profiles.id` has a foreign key to `auth.users.id` created via
-// hand-authored raw SQL in the migration (see prisma/rls-and-triggers/
-// and prisma/migrations/README.md), not as a Prisma-native relation.
-//
-// Prisma in this project is restricted to schema/migrations/seed/admin
-// scripts only. All user-facing reads/writes go through the Supabase
-// client (supabase-js) so Postgres Row Level Security is enforced per
-// request. See prisma/README.md.
+// =============================================================================
+// AUTH SCHEMA — Supabase-managed (REFERENCE ONLY)
+// =============================================================================
 
-model Profile {
-  id        String   @id
-  fullName  String?  @map("full_name")
-  avatarUrl String?  @map("avatar_url")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+/// ╔══════════════════════════════════════════════════════════════╗
+/// ║  READ-ONLY — Managed exclusively by Supabase Auth.         ║
+/// ║  DO NOT use prisma.users.create / update / delete.         ║
+/// ║  All user mutations MUST go through Supabase Auth client.  ║
+/// ║  This model exists only to satisfy the FK:                 ║
+/// ║    public.profiles.id → auth.users.id (ON DELETE CASCADE)  ║
+/// ╚══════════════════════════════════════════════════════════════╝
+model users {
+  id        String    @id @db.Uuid
+  profiles  profiles?
 
-  userRoles       UserRole[]
-  userTracks      UserTrack[]
-  auditLogs       AuditLog[]             @relation("AuditLogActor")
-  createdContent  Content[]              @relation("ContentCreatedBy")
-  createdVersions ContentVersion[]       @relation("ContentVersionCreatedBy")
-  contentProgress UserContentProgress[]
-
-  @@map("profiles")
+  @@schema("auth")
 }
 
-model Role {
-  id          Int     @id @default(autoincrement())
-  name        String  @unique
-  description String?
+// =============================================================================
+// IGNORED AUTH MODELS — Managed by Supabase, invisible to Prisma Client
+// =============================================================================
 
-  rolePermissions RolePermission[]
-  userRoles       UserRole[]
+/// @@ignore — Supabase Auth
+model audit_log_entries {
+  instance_id String?   @db.Uuid
+  id          String    @id @db.Uuid
+  payload     Json?     @db.Json
+  created_at  DateTime? @db.Timestamptz(6)
+  ip_address  String    @default("") @db.VarChar(64)
 
-  @@map("roles")
+  @@ignore
+  @@index([instance_id], map: "audit_logs_instance_id_idx")
+  @@schema("auth")
 }
 
-model Permission {
-  id          Int     @id @default(autoincrement())
-  key         String  @unique
-  description String?
+/// @@ignore — Supabase Auth
+model custom_oauth_providers {
+  id                      String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  provider_type           String
+  identifier              String    @unique
+  name                    String
+  client_id               String
+  client_secret           String
+  acceptable_client_ids   String[]  @default([])
+  scopes                  String[]  @default([])
+  pkce_enabled            Boolean   @default(true)
+  attribute_mapping       Json      @default("{}")
+  authorization_params    Json      @default("{}")
+  enabled                 Boolean   @default(true)
+  email_optional          Boolean   @default(false)
+  issuer                  String?
+  discovery_url           String?
+  skip_nonce_check        Boolean   @default(false)
+  cached_discovery        Json?
+  discovery_cached_at     DateTime? @db.Timestamptz(6)
+  authorization_url       String?
+  token_url               String?
+  userinfo_url            String?
+  jwks_uri                String?
+  created_at              DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at              DateTime  @default(now()) @db.Timestamptz(6)
+  custom_claims_allowlist String[]  @default([])
 
-  rolePermissions RolePermission[]
-
-  @@map("permissions")
+  @@ignore
+  @@index([created_at])
+  @@index([enabled])
+  @@index([identifier])
+  @@index([provider_type])
+  @@schema("auth")
 }
 
-model RolePermission {
-  roleId       Int @map("role_id")
-  permissionId Int @map("permission_id")
+/// @@ignore — Supabase Auth
+model flow_state {
+  id                     String    @id @db.Uuid
+  user_id                String?   @db.Uuid
+  auth_code              String?
+  code_challenge_method  code_challenge_method?
+  code_challenge         String?
+  provider_type          String
+  provider_access_token  String?
+  provider_refresh_token String?
+  created_at             DateTime? @db.Timestamptz(6)
+  updated_at             DateTime? @db.Timestamptz(6)
+  authentication_method  String
+  auth_code_issued_at    DateTime? @db.Timestamptz(6)
+  invite_token           String?
+  referrer               String?
+  oauth_client_state_id  String?   @db.Uuid
+  linking_target_id      String?   @db.Uuid
+  email_optional         Boolean   @default(false)
 
-  role       Role       @relation(fields: [roleId], references: [id])
-  permission Permission @relation(fields: [permissionId], references: [id])
-
-  @@id([roleId, permissionId])
-  @@index([permissionId])
-  @@map("role_permissions")
+  @@ignore
+  @@index([created_at(sort: Desc)])
+  @@index([auth_code], map: "idx_auth_code")
+  @@index([user_id, authentication_method], map: "idx_user_id_auth_method")
+  @@schema("auth")
 }
 
-model UserRole {
-  id     Int     @id @default(autoincrement())
-  userId String  @map("user_id")
-  roleId Int     @map("role_id")
-  orgId  String? @map("org_id") // reserved for future Organization FK; deferred table not yet created
+/// @@ignore — Supabase Auth
+model identities {
+  provider_id     String
+  user_id         String    @db.Uuid
+  identity_data   Json
+  provider        String
+  last_sign_in_at DateTime? @db.Timestamptz(6)
+  created_at      DateTime? @db.Timestamptz(6)
+  updated_at      DateTime? @db.Timestamptz(6)
+  email           String?   @default(dbgenerated("lower((identity_data ->> 'email'::text))"))
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
-  user Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
-  role Role    @relation(fields: [roleId], references: [id])
-
-  @@unique([userId, roleId, orgId])
-  @@index([userId])
-  @@map("user_roles")
+  @@ignore
+  @@unique([provider_id, provider], map: "identities_provider_id_provider_unique")
+  @@index([email])
+  @@index([user_id])
+  @@schema("auth")
 }
 
-model AuditLog {
-  id          Int      @id @default(autoincrement())
-  actorUserId String?  @map("actor_user_id")
-  action      String
-  entityType  String   @map("entity_type")
-  entityId    String   @map("entity_id")
-  metadata    Json?
-  createdAt   DateTime @default(now()) @map("created_at")
+/// @@ignore — Supabase Auth
+model instances {
+  id              String    @id @db.Uuid
+  uuid            String?   @db.Uuid
+  raw_base_config String?
+  created_at      DateTime? @db.Timestamptz(6)
+  updated_at      DateTime? @db.Timestamptz(6)
 
-  actor Profile? @relation("AuditLogActor", fields: [actorUserId], references: [id], onDelete: SetNull)
-
-  @@index([entityType, entityId])
-  @@map("audit_logs")
+  @@ignore
+  @@schema("auth")
 }
 
-model Domain {
-  id          Int     @id @default(autoincrement())
+/// @@ignore — Supabase Auth
+model mfa_amr_claims {
+  session_id            String   @db.Uuid
+  created_at            DateTime @db.Timestamptz(6)
+  updated_at            DateTime @db.Timestamptz(6)
+  authentication_method String
+  id                    String   @id(map: "amr_id_pk") @db.Uuid
+
+  @@ignore
+  @@unique([session_id, authentication_method], map: "mfa_amr_claims_session_id_authentication_method_pkey")
+  @@schema("auth")
+}
+
+/// @@ignore — Supabase Auth
+model mfa_challenges {
+  id                     String      @id @db.Uuid
+  factor_id              String      @db.Uuid
+  created_at             DateTime    @db.Timestamptz(6)
+  verified_at            DateTime?   @db.Timestamptz(6)
+  ip_address             String      @db.Inet
+  otp_code               String?
+  web_authn_session_data Json?
+
+  @@ignore
+  @@index([created_at(sort: Desc)], map: "mfa_challenge_created_at_idx")
+  @@schema("auth")
+}
+
+/// @@ignore — Supabase Auth
+model mfa_factors {
+  id                           String       @id @db.Uuid
+  user_id                      String       @db.Uuid
+  friendly_name                String?
+  factor_type                  factor_type
+  status                       factor_status
+  created_at                   DateTime     @db.Timestamptz(6)
+  updated_at                   DateTime     @db.Timestamptz(6)
+  secret                       String?
+  phone                        String?
+  last_challenged_at           DateTime?    @unique @db.Timestamptz(6)
+  web_authn_credential         Json?
+  web_authn_aaguid             String?      @db.Uuid
+  last_webauthn_challenge_data Json?
+
+  @@ignore
+  @@unique([user_id, phone], map: "unique_phone_factor_per_user")
+  @@index([user_id, created_at], map: "factor_id_created_at_idx")
+  @@index([user_id])
+  @@schema("auth")
+}
+
+/// @@ignore — Supabase Auth
+model oauth_authorizations {
+  id                    String                     @id @db.Uuid
+  authorization_id      String                     @unique
+  client_id             String                     @db.Uuid
+  user_id               String?                    @db.Uuid
+  redirect_uri          String
+  scope                 String
+  state                 String?
+  resource              String?
+  code_challenge        String?
+  code_challenge_method code_challenge_method?
+  response_type         oauth_response_type        @default(code)
+  status                oauth_authorization_status @default(pending)
+  authorization_code    String?                    @unique
+  created_at            DateTime                   @default(now()) @db.Timestamptz(6)
+  expires_at            DateTime                   @default(dbgenerated("(now() + '00:03:00'::interval)")) @db.Timestamptz(6)
+  approved_at           DateTime?                  @db.Timestamptz(6)
+  nonce                 String?
+
+  @@ignore
+  @@schema("auth")
+}
+
+/// @@ignore — Supabase Auth
+model oauth_client_states {
+  id            String   @id @db.Uuid
+  provider_type String
+  code_verifier String?
+  created_at    DateTime @db.Timestamptz(6)
+
+  @@ignore
+  @@index([created_at], map: "idx_oauth_client_states_created_at")
+  @@schema("auth")
+}
+
+/// @@ignore — Supabase Auth
+model oauth_clients {
+  id                         String                  @id @db.Uuid
+  client_secret_hash         String?
+  registration_type          oauth_registration_type
+  redirect_uris              String
+  grant_types                String
+  client_name                String?
+  client_uri                 String?
+  logo_uri                   String?
+  created_at                 DateTime                @default(now()) @db.Timestamptz(6)
+  updated_at                 DateTime                @default(now()) @db.Timestamptz(6)
+  deleted_at                 DateTime?               @db.Timestamptz(6)
+  client_type                oauth_client_type       @default(confidential)
+  token_endpoint_auth_method String
+
+  @@ignore
+  @@index([deleted_at])
+  @@schema("auth")
+}
+
+/// @@ignore — Supabase Auth
+model oauth_consents {
+  id         String    @id @db.Uuid
+  user_id    String    @db.Uuid
+  client_id  String    @db.Uuid
+  scopes     String
+  granted_at DateTime  @default(now()) @db.Timestamptz(6)
+  revoked_at DateTime? @db.Timestamptz(6)
+
+  @@ignore
+  @@unique([user_id, client_id], map: "oauth_consents_user_client_unique")
+  @@index([user_id, granted_at(sort: Desc)], map: "oauth_consents_user_order_idx")
+  @@schema("auth")
+}
+
+/// @@ignore — Supabase Auth
+model one_time_tokens {
+  id         String              @id @db.Uuid
+  user_id    String              @db.Uuid
+  token_type one_time_token_type
+  token_hash String
+  relates_to String
+  created_at DateTime            @default(now()) @db.Timestamp(6)
+  updated_at DateTime            @default(now()) @db.Timestamp(6)
+
+  @@ignore
+  @@unique([user_id, token_type])
+  @@index([relates_to], map: "one_time_tokens_relates_to_hash_idx", type: Hash)
+  @@index([token_hash], map: "one_time_tokens_token_hash_hash_idx", type: Hash)
+  @@schema("auth")
+}
+
+/// @@ignore — Supabase Auth
+model refresh_tokens {
+  instance_id String?   @db.Uuid
+  id          BigInt    @id @default(autoincrement())
+  token       String?   @unique(map: "refresh_tokens_token_unique") @db.VarChar(255)
+  user_id     String?   @db.VarChar(255)
+  revoked     Boolean?
+  created_at  DateTime? @db.Timestamptz(6)
+  updated_at  DateTime? @db.Timestamptz(6)
+  parent      String?   @db.VarChar(255)
+  session_id  String?   @db.Uuid
+
+  @@ignore
+  @@index([instance_id])
+  @@index([instance_id, user_id])
+  @@index([parent])
+  @@index([session_id, revoked])
+  @@index([updated_at(sort: Desc)])
+  @@schema("auth")
+}
+
+/// @@ignore — Supabase Auth
+model saml_providers {
+  id              String    @id @db.Uuid
+  sso_provider_id String    @db.Uuid
+  entity_id       String    @unique
+  metadata_xml    String
+  metadata_url    String?
+  attribute_mapping Json?
+  created_at      DateTime? @db.Timestamptz(6)
+  updated_at      DateTime? @db.Timestamptz(6)
+  name_id_format  String?
+
+  @@ignore
+  @@index([sso_provider_id])
+  @@schema("auth")
+}
+
+/// @@ignore — Supabase Auth
+model saml_relay_states {
+  id              String    @id @db.Uuid
+  sso_provider_id String    @db.Uuid
+  request_id      String
+  for_email       String?
+  redirect_to     String?
+  created_at      DateTime? @db.Timestamptz(6)
+  updated_at      DateTime? @db.Timestamptz(6)
+  flow_state_id   String?   @db.Uuid
+
+  @@ignore
+  @@index([created_at(sort: Desc)])
+  @@index([for_email])
+  @@index([sso_provider_id])
+  @@schema("auth")
+}
+
+/// @@ignore — Supabase Auth
+model schema_migrations {
+  version String @id @db.VarChar(255)
+
+  @@ignore
+  @@schema("auth")
+}
+
+/// @@ignore — Supabase Auth
+model sessions {
+  id                     String    @id @db.Uuid
+  user_id                String    @db.Uuid
+  created_at             DateTime? @db.Timestamptz(6)
+  updated_at             DateTime? @db.Timestamptz(6)
+  factor_id              String?   @db.Uuid
+  aal                    aal_level?
+  not_after              DateTime? @db.Timestamptz(6)
+  refreshed_at           DateTime? @db.Timestamp(6)
+  user_agent             String?
+  ip                     String?   @db.Inet
+  tag                    String?
+  oauth_client_id        String?   @db.Uuid
+  refresh_token_hmac_key String?
+  refresh_token_counter  BigInt?
+  scopes                 String?
+
+  @@ignore
+  @@index([not_after(sort: Desc)])
+  @@index([oauth_client_id])
+  @@index([user_id])
+  @@index([user_id, created_at], map: "user_id_created_at_idx")
+  @@schema("auth")
+}
+
+/// @@ignore — Supabase Auth
+model sso_domains {
+  id              String    @id @db.Uuid
+  sso_provider_id String    @db.Uuid
+  domain          String
+  created_at      DateTime? @db.Timestamptz(6)
+  updated_at      DateTime? @db.Timestamptz(6)
+
+  @@ignore
+  @@index([sso_provider_id])
+  @@schema("auth")
+}
+
+/// @@ignore — Supabase Auth
+model sso_providers {
+  id          String    @id @db.Uuid
+  resource_id String?
+  created_at  DateTime? @db.Timestamptz(6)
+  updated_at  DateTime? @db.Timestamptz(6)
+  disabled    Boolean?
+
+  @@ignore
+  @@index([resource_id], map: "sso_providers_resource_id_pattern_idx")
+  @@schema("auth")
+}
+
+/// @@ignore — Supabase Auth
+model webauthn_challenges {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id        String?  @db.Uuid
+  challenge_type String
+  session_data   Json
+  created_at     DateTime @default(now()) @db.Timestamptz(6)
+  expires_at     DateTime @db.Timestamptz(6)
+
+  @@ignore
+  @@index([expires_at])
+  @@index([user_id])
+  @@schema("auth")
+}
+
+/// @@ignore — Supabase Auth
+model webauthn_credentials {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id          String    @db.Uuid
+  credential_id    Bytes     @unique
+  public_key       Bytes
+  attestation_type String    @default("")
+  aaguid           String?   @db.Uuid
+  sign_count       BigInt    @default(0)
+  transports       Json      @default("[]")
+  backup_eligible  Boolean   @default(false)
+  backed_up        Boolean   @default(false)
+  friendly_name    String    @default("")
+  created_at       DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime  @default(now()) @db.Timestamptz(6)
+  last_used_at     DateTime? @db.Timestamptz(6)
+
+  @@ignore
+  @@index([user_id])
+  @@schema("auth")
+}
+
+// =============================================================================
+// PUBLIC SCHEMA — Prisma-managed (16 tables)
+// =============================================================================
+
+model audit_logs {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  actor_user_id String?   @db.Uuid
+  action        String
+  entity_type   String
+  entity_id     String
+  metadata      Json?
+  created_at    DateTime  @default(now())
+  profiles      profiles? @relation(fields: [actor_user_id], references: [id])
+
+  @@index([entity_type, entity_id])
+  @@schema("public")
+}
+
+model categories {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  domain_id String    @db.Uuid
+  name      String
+  slug      String    @unique
+  domains   domains   @relation(fields: [domain_id], references: [id])
+  content   content[]
+
+  @@index([domain_id])
+  @@schema("public")
+}
+
+model content {
+  id              String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  content_type_id String                  @db.Uuid
+  category_id     String?                 @db.Uuid
+  domain_id       String                  @db.Uuid
+  title           String
+  description     String?
+  body            Json?
+  media_path      String?
+  is_published    Boolean                 @default(false)
+  created_by      String?                 @db.Uuid
+  created_at      DateTime                @default(now())
+  updated_at      DateTime
+  categories      categories?             @relation(fields: [category_id], references: [id])
+  content_types   content_types           @relation(fields: [content_type_id], references: [id])
+  profiles        profiles?               @relation(fields: [created_by], references: [id])
+  domains         domains                 @relation(fields: [domain_id], references: [id])
+  content_prerequisites_content_prerequisites_content_idTocontent              content_prerequisites[] @relation("content_prerequisites_content_idTocontent")
+  content_prerequisites_content_prerequisites_prerequisite_content_idTocontent content_prerequisites[] @relation("content_prerequisites_prerequisite_content_idTocontent")
+  content_versions                                                             content_versions[]
+  user_content_progress                                                        user_content_progress[]
+
+  @@index([category_id])
+  @@index([content_type_id])
+  @@index([domain_id])
+  @@schema("public")
+}
+
+model content_prerequisites {
+  id                      String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  content_id              String  @db.Uuid
+  prerequisite_content_id String  @db.Uuid
+  content_content_prerequisites_content_idTocontent              content @relation("content_prerequisites_content_idTocontent", fields: [content_id], references: [id])
+  content_content_prerequisites_prerequisite_content_idTocontent content @relation("content_prerequisites_prerequisite_content_idTocontent", fields: [prerequisite_content_id], references: [id])
+
+  @@unique([content_id, prerequisite_content_id])
+  @@index([prerequisite_content_id])
+  @@schema("public")
+}
+
+model content_types {
+  id      String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  key     String    @unique
+  label   String
+  content content[]
+
+  @@schema("public")
+}
+
+model content_versions {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  content_id     String    @db.Uuid
+  version_number Int
+  body_snapshot  Json
+  created_by     String?   @db.Uuid
+  created_at     DateTime  @default(now())
+  content        content   @relation(fields: [content_id], references: [id])
+  profiles       profiles? @relation(fields: [created_by], references: [id])
+
+  @@unique([content_id, version_number])
+  @@index([content_id])
+  @@schema("public")
+}
+
+model domains {
+  id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name        String
-  slug        String  @unique
+  slug        String       @unique
   description String?
+  categories  categories[]
+  content     content[]
+  tracks      tracks[]
 
-  tracks     Track[]
-  categories Category[]
-  content    Content[]
-
-  @@map("domains")
+  @@schema("public")
 }
 
-model Track {
-  id          Int     @id @default(autoincrement())
-  domainId    Int     @map("domain_id")
-  fullLabel   String  @map("full_label")
-  shortLabel  String  @map("short_label")
-  slug        String  @unique
+model permissions {
+  id               String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  key              String             @unique
+  description      String?
+  role_permissions role_permissions[]
+
+  @@schema("public")
+}
+
+model profiles {
+  id                    String                  @id @db.Uuid
+  full_name             String?
+  avatar_url            String?
+  created_at            DateTime                @default(now())
+  updated_at            DateTime
+  users                 users                   @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  audit_logs            audit_logs[]
+  content               content[]
+  content_versions      content_versions[]
+  user_content_progress user_content_progress[]
+  user_roles            user_roles[]
+  user_tracks           user_tracks[]
+
+  @@schema("public")
+}
+
+model progress_status {
+  id                    String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  key                   String                  @unique
+  label                 String
+  user_content_progress user_content_progress[]
+
+  @@schema("public")
+}
+
+model role_permissions {
+  role_id       String      @db.Uuid
+  permission_id String      @db.Uuid
+  permissions   permissions @relation(fields: [permission_id], references: [id])
+  roles         roles       @relation(fields: [role_id], references: [id])
+
+  @@id([role_id, permission_id])
+  @@index([permission_id])
+  @@schema("public")
+}
+
+model roles {
+  id               String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name             String             @unique
+  description      String?
+  role_permissions role_permissions[]
+  user_roles       user_roles[]
+
+  @@schema("public")
+}
+
+model tracks {
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  domain_id   String        @db.Uuid
+  full_label  String
+  short_label String
+  slug        String        @unique
   description String?
-  sortOrder   Int     @default(0) @map("sort_order")
+  sort_order  Int           @default(0)
+  domains     domains       @relation(fields: [domain_id], references: [id])
+  user_tracks user_tracks[]
 
-  domain     Domain      @relation(fields: [domainId], references: [id])
-  userTracks UserTrack[]
-
-  @@index([domainId])
-  @@map("tracks")
+  @@index([domain_id])
+  @@schema("public")
 }
 
-model UserTrack {
-  id        Int       @id @default(autoincrement())
-  userId    String    @map("user_id")
-  trackId   Int       @map("track_id")
-  isPrimary Boolean   @default(false) @map("is_primary")
-  status    String    @default("active")
-  startedAt DateTime  @default(now()) @map("started_at")
-  endedAt   DateTime? @map("ended_at")
+model user_content_progress {
+  id                 String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id            String          @db.Uuid
+  content_id         String          @db.Uuid
+  status_id          String          @db.Uuid
+  progress_percent   Int             @default(0)
+  started_at         DateTime?
+  completed_at       DateTime?
+  last_interacted_at DateTime?
+  content            content         @relation(fields: [content_id], references: [id])
+  progress_status    progress_status @relation(fields: [status_id], references: [id])
+  profiles           profiles        @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-  user  Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
-  track Track   @relation(fields: [trackId], references: [id])
-
-  @@index([userId])
-  @@index([trackId])
-  @@map("user_tracks")
+  @@unique([user_id, content_id])
+  @@index([user_id])
+  @@schema("public")
 }
 
-model ContentType {
-  id    Int    @id @default(autoincrement())
-  key   String @unique
-  label String
+model user_roles {
+  id       String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id  String   @db.Uuid
+  role_id  String   @db.Uuid
+  org_id   String?
+  roles    roles    @relation(fields: [role_id], references: [id])
+  profiles profiles @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-  content Content[]
-
-  @@map("content_types")
+  @@unique([user_id, role_id, org_id])
+  @@index([user_id])
+  @@schema("public")
 }
 
-model Category {
-  id       Int    @id @default(autoincrement())
-  domainId Int    @map("domain_id")
-  name     String
-  slug     String @unique
+model user_tracks {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String    @db.Uuid
+  track_id   String    @db.Uuid
+  is_primary Boolean   @default(false)
+  status     String    @default("active")
+  started_at DateTime  @default(now())
+  ended_at   DateTime?
+  tracks     tracks    @relation(fields: [track_id], references: [id])
+  profiles   profiles  @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-  domain  Domain    @relation(fields: [domainId], references: [id])
-  content Content[]
-
-  @@index([domainId])
-  @@map("categories")
+  @@index([track_id])
+  @@index([user_id])
+  @@schema("public")
 }
 
-model Content {
-  id            Int      @id @default(autoincrement())
-  contentTypeId Int      @map("content_type_id")
-  categoryId    Int?     @map("category_id")
-  domainId      Int      @map("domain_id")
-  title         String
-  description   String?
-  body          Json?
-  mediaPath     String?  @map("media_path")
-  isPublished   Boolean  @default(false) @map("is_published")
-  createdBy     String?  @map("created_by")
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+// =============================================================================
+// IGNORED AUTH ENUMS — Managed by Supabase, invisible to Prisma Client
+// =============================================================================
 
-  contentType ContentType @relation(fields: [contentTypeId], references: [id])
-  category    Category?   @relation(fields: [categoryId], references: [id])
-  domain      Domain      @relation(fields: [domainId], references: [id])
-  creator     Profile?    @relation("ContentCreatedBy", fields: [createdBy], references: [id], onDelete: SetNull)
-
-  versions        ContentVersion[]
-  progress        UserContentProgress[]
-  gatedBy         ContentPrerequisite[] @relation("ContentGated")
-  prerequisiteFor ContentPrerequisite[] @relation("ContentPrerequisite")
-
-  @@index([contentTypeId])
-  @@index([categoryId])
-  @@index([domainId])
-  @@map("content")
+enum aal_level {
+  aal1
+  aal2
+  aal3
+  @@schema("auth")
 }
 
-model ContentVersion {
-  id            Int      @id @default(autoincrement())
-  contentId     Int      @map("content_id")
-  versionNumber Int      @map("version_number")
-  bodySnapshot  Json     @map("body_snapshot")
-  createdBy     String?  @map("created_by")
-  createdAt     DateTime @default(now()) @map("created_at")
-
-  content Content  @relation(fields: [contentId], references: [id])
-  creator Profile? @relation("ContentVersionCreatedBy", fields: [createdBy], references: [id], onDelete: SetNull)
-
-  @@unique([contentId, versionNumber])
-  @@index([contentId])
-  @@map("content_versions")
+enum code_challenge_method {
+  s256
+  plain
+  @@schema("auth")
 }
 
-model ContentPrerequisite {
-  id                    Int @id @default(autoincrement())
-  contentId             Int @map("content_id")
-  prerequisiteContentId Int @map("prerequisite_content_id")
-
-  content      Content @relation("ContentGated", fields: [contentId], references: [id])
-  prerequisite Content @relation("ContentPrerequisite", fields: [prerequisiteContentId], references: [id])
-
-  @@unique([contentId, prerequisiteContentId])
-  @@index([prerequisiteContentId])
-  @@map("content_prerequisites")
+enum factor_status {
+  unverified
+  verified
+  @@schema("auth")
 }
 
-model ProgressStatus {
-  id    Int    @id @default(autoincrement())
-  key   String @unique
-  label String
-
-  progress UserContentProgress[]
-
-  @@map("progress_status")
+enum factor_type {
+  totp
+  webauthn
+  phone
+  @@schema("auth")
 }
 
-model UserContentProgress {
-  id               Int       @id @default(autoincrement())
-  userId           String    @map("user_id")
-  contentId        Int       @map("content_id")
-  statusId         Int       @map("status_id")
-  progressPercent  Int       @default(0) @map("progress_percent")
-  startedAt        DateTime? @map("started_at")
-  completedAt      DateTime? @map("completed_at")
-  lastInteractedAt DateTime? @map("last_interacted_at")
+enum oauth_authorization_status {
+  pending
+  approved
+  denied
+  expired
+  @@schema("auth")
+}
 
-  user    Profile        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  content Content        @relation(fields: [contentId], references: [id])
-  status  ProgressStatus @relation(fields: [statusId], references: [id])
+enum oauth_client_type {
+  public
+  confidential
+  @@schema("auth")
+}
 
-  @@unique([userId, contentId])
-  @@index([userId])
-  @@map("user_content_progress")
+enum oauth_registration_type {
+  dynamic
+  manual
+  @@schema("auth")
+}
+
+enum oauth_response_type {
+  code
+  @@schema("auth")
+}
+
+enum one_time_token_type {
+  confirmation_token
+  reauthentication_token
+  recovery_token
+  email_change_token_new
+  email_change_token_current
+  phone_change_token
+  @@schema("auth")
 }

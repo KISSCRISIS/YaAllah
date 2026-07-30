@@ -1,39 +1,38 @@
 import { PrismaClient } from '@prisma/client';
 
 // Seed script for MVP reference/lookup data only, per SEG Backend Blueprint
-// v1.1. This file is committed as part of the backend foundation and is NOT
-// executed as part of this task. Run manually via `npm run db:seed` only
-// after real Supabase credentials exist and migrations have been applied.
+// v1.2 — Updated for UUID schema (Phase 0.3A). Model names match
+// snake_case introspected from PostgreSQL via multiSchema.
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const domain = await prisma.domain.upsert({
+  const domain = await prisma.domains.upsert({
     where: { slug: 'emergency-medicine' },
     update: {},
     create: { name: 'Emergency Medicine', slug: 'emergency-medicine' },
   });
 
   const tracks = [
-    { fullLabel: 'Intern Doctors / JMC', shortLabel: 'Intern / JMC', slug: 'intern_jmc', sortOrder: 1 },
-    { fullLabel: 'Emergency Medicine Residents', shortLabel: 'EM Resident', slug: 'em_resident', sortOrder: 2 },
-    { fullLabel: 'Medical Students', shortLabel: 'Med Student', slug: 'med_student', sortOrder: 3 },
-    { fullLabel: 'General Practitioners', shortLabel: 'GP', slug: 'gp', sortOrder: 4 },
-    { fullLabel: 'EMS / Paramedics', shortLabel: 'EMS/Paramedic', slug: 'ems_paramedic', sortOrder: 5 },
-    { fullLabel: 'Emergency Nursing', shortLabel: 'ER Nursing', slug: 'er_nursing', sortOrder: 6 },
+    { full_label: 'Intern Doctors / JMC', short_label: 'Intern / JMC', slug: 'intern_jmc', sort_order: 1 },
+    { full_label: 'Emergency Medicine Residents', short_label: 'EM Resident', slug: 'em_resident', sort_order: 2 },
+    { full_label: 'Medical Students', short_label: 'Med Student', slug: 'med_student', sort_order: 3 },
+    { full_label: 'General Practitioners', short_label: 'GP', slug: 'gp', sort_order: 4 },
+    { full_label: 'EMS / Paramedics', short_label: 'EMS/Paramedic', slug: 'ems_paramedic', sort_order: 5 },
+    { full_label: 'Emergency Nursing', short_label: 'ER Nursing', slug: 'er_nursing', sort_order: 6 },
   ];
 
   for (const track of tracks) {
-    await prisma.track.upsert({
+    await prisma.tracks.upsert({
       where: { slug: track.slug },
       update: {},
-      create: { ...track, domainId: domain.id },
+      create: { ...track, domain_id: domain.id },
     });
   }
 
   const roles = ['learner', 'instructor', 'content_reviewer', 'admin'];
   for (const name of roles) {
-    await prisma.role.upsert({ where: { name }, update: {}, create: { name } });
+    await prisma.roles.upsert({ where: { name }, update: {}, create: { name } });
   }
 
   const permissions = [
@@ -46,7 +45,7 @@ async function main() {
   ];
 
   for (const permission of permissions) {
-    await prisma.permission.upsert({
+    await prisma.permissions.upsert({
       where: { key: permission.key },
       update: {},
       create: permission,
@@ -68,25 +67,25 @@ async function main() {
   };
 
   for (const [roleName, permissionKeys] of Object.entries(rolePermissionMap)) {
-    const role = await prisma.role.findUniqueOrThrow({ where: { name: roleName } });
+    const role = await prisma.roles.findUniqueOrThrow({ where: { name: roleName } });
     for (const permissionKey of permissionKeys) {
-      const permission = await prisma.permission.findUniqueOrThrow({ where: { key: permissionKey } });
-      await prisma.rolePermission.upsert({
-        where: { roleId_permissionId: { roleId: role.id, permissionId: permission.id } },
+      const permission = await prisma.permissions.findUniqueOrThrow({ where: { key: permissionKey } });
+      await prisma.role_permissions.upsert({
+        where: { role_id_permission_id: { role_id: role.id, permission_id: permission.id } },
         update: {},
-        create: { roleId: role.id, permissionId: permission.id },
+        create: { role_id: role.id, permission_id: permission.id },
       });
     }
   }
 
   const contentTypes = ['module', 'lesson', 'protocol', 'drug', 'clinical_case', 'quiz', 'video'];
   for (const key of contentTypes) {
-    await prisma.contentType.upsert({ where: { key }, update: {}, create: { key, label: key } });
+    await prisma.content_types.upsert({ where: { key }, update: {}, create: { key, label: key } });
   }
 
   const progressStatuses = ['not_started', 'in_progress', 'completed', 'locked'];
   for (const key of progressStatuses) {
-    await prisma.progressStatus.upsert({ where: { key }, update: {}, create: { key, label: key } });
+    await prisma.progress_status.upsert({ where: { key }, update: {}, create: { key, label: key } });
   }
 }
 

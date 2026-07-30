@@ -1,0 +1,199 @@
+{
+  "exported_at": "2026-07-30T16:16:54.819Z",
+  "tables": {
+    "categories": {
+      "row_count": 0,
+      "rows": []
+    },
+    "content_types": {
+      "row_count": 7,
+      "rows": [
+        {
+          "id": "4458829c-898d-4477-9148-97ed33e98ba1",
+          "name": "video",
+          "description": null,
+          "created_at": "2026-07-27T14:41:07.668Z"
+        },
+        {
+          "id": "713ff51c-0b8d-4739-918a-950efdb4ed9e",
+          "name": "quiz",
+          "description": null,
+          "created_at": "2026-07-27T14:41:07.668Z"
+        },
+        {
+          "id": "b1096021-7771-429b-bcff-79d360aa6507",
+          "name": "protocol",
+          "description": null,
+          "created_at": "2026-07-27T14:41:07.668Z"
+        },
+        {
+          "id": "bdac6442-8383-45a1-b065-321e7b4134c3",
+          "name": "drug",
+          "description": null,
+          "created_at": "2026-07-27T14:41:07.668Z"
+        },
+        {
+          "id": "deaa5cfd-f984-48c7-b692-54bab1973eee",
+          "name": "clinical_case",
+          "description": null,
+          "created_at": "2026-07-27T14:41:07.668Z"
+        },
+        {
+          "id": "e25a4dfa-ae8c-4d44-a2f4-5097cb9bca90",
+          "name": "module",
+          "description": null,
+          "created_at": "2026-07-27T14:41:07.668Z"
+        },
+        {
+          "id": "eaac5664-d296-4887-aee5-9ac76d810514",
+          "name": "lesson",
+          "description": null,
+          "created_at": "2026-07-27T14:41:07.668Z"
+        }
+      ]
+    },
+    "domains": {
+      "row_count": 1,
+      "rows": [
+        {
+          "id": "6b8f402b-3fa7-42e7-8135-e9f826252499",
+          "name": "Emergency Medicine",
+          "description": "Initial SEG medical domain",
+          "created_at": "2026-07-27T14:41:07.668Z"
+        }
+      ]
+    },
+    "permissions": {
+      "row_count": 0,
+      "rows": []
+    },
+    "progress_status": {
+      "row_count": 4,
+      "rows": [
+        {
+          "id": "495b9fae-ed8f-4e59-965f-3838cb506420",
+          "key": "locked",
+          "label": "Locked",
+          "created_at": "2026-07-27T14:41:07.668Z"
+        },
+        {
+          "id": "7b27bc92-ed5b-4445-b885-a356863b7552",
+          "key": "in_progress",
+          "label": "In Progress",
+          "created_at": "2026-07-27T14:41:07.668Z"
+        },
+        {
+          "id": "b3f90357-24ad-4bea-b4c8-ad665034a0a1",
+          "key": "not_started",
+          "label": "Not Started",
+          "created_at": "2026-07-27T14:41:07.668Z"
+        },
+        {
+          "id": "d265da70-1250-40ee-ac37-b040e8ddcf6e",
+          "key": "completed",
+          "label": "Completed",
+          "created_at": "2026-07-27T14:41:07.668Z"
+        }
+      ]
+    },
+    "role_permissions": {
+      "row_count": 0,
+      "rows": []
+    },
+    "roles": {
+      "row_count": 5,
+      "rows": [
+        {
+          "id": "13e490d9-b56f-4897-94e7-6e72b154c685",
+          "name": "org_admin",
+          "description": null,
+          "created_at": "2026-07-27T14:41:07.668Z"
+        },
+        {
+          "id": "9ba654ee-50a7-47d2-8be5-4ba44dc8dd18",
+          "name": "content_reviewer",
+          "description": null,
+          "created_at": "2026-07-27T14:41:07.668Z"
+        },
+        {
+          "id": "b137f117-fb4a-41f4-a8ba-abcfa8f83c7b",
+          "name": "instructor",
+          "description": null,
+          "created_at": "2026-07-27T14:41:07.668Z"
+        },
+        {
+          "id": "b5249dd0-f4ce-4118-b324-e4a4561f067a",
+          "name": "learner",
+          "description": null,
+          "created_at": "2026-07-27T14:41:07.668Z"
+        },
+        {
+          "id": "d9feef17-805b-4c73-a066-41a801242008",
+          "name": "super_admin",
+          "description": null,
+          "created_at": "2026-07-27T14:41:07.668Z"
+        }
+      ]
+    },
+    "tracks": {
+      "row_count": 6,
+      "rows": [
+        {
+          "id": "08efe724-b706-4e90-8979-479b90d0f280",
+          "domain_id": "6b8f402b-3fa7-42e7-8135-e9f826252499",
+          "slug": "er_nursing",
+          "full_label": "Emergency Nursing",
+          "short_label": "ER Nursing",
+          "description": null,
+          "created_at": "2026-07-27T14:41:07.668Z"
+        },
+        {
+          "id": "2844d7fb-127b-46be-8b8e-0f62c9e6b0fd",
+          "domain_id": "6b8f402b-3fa7-42e7-8135-e9f826252499",
+          "slug": "ems_paramedic",
+          "full_label": "EMS / Paramedics",
+          "short_label": "EMS/Paramedic",
+          "description": null,
+          "created_at": "2026-07-27T14:41:07.668Z"
+        },
+        {
+          "id": "56d7ad99-4feb-4ec2-ae96-72667126a6ea",
+          "domain_id": "6b8f402b-3fa7-42e7-8135-e9f826252499",
+          "slug": "gp",
+          "full_label": "General Practitioners",
+          "short_label": "GP",
+          "description": null,
+          "created_at": "2026-07-27T14:41:07.668Z"
+        },
+        {
+          "id": "62b9a1b0-b414-4f6a-bee7-d387c9c0ae4d",
+          "domain_id": "6b8f402b-3fa7-42e7-8135-e9f826252499",
+          "slug": "em_resident",
+          "full_label": "Emergency Medicine Residents",
+          "short_label": "EM Resident",
+          "description": null,
+          "created_at": "2026-07-27T14:41:07.668Z"
+        },
+        {
+          "id": "9323d177-9614-4e6d-8ad7-dc81d1fded72",
+          "domain_id": "6b8f402b-3fa7-42e7-8135-e9f826252499",
+          "slug": "med_student",
+          "full_label": "Medical Students",
+          "short_label": "Med Student",
+          "description": null,
+          "created_at": "2026-07-27T14:41:07.668Z"
+        },
+        {
+          "id": "c41d9866-3f4f-4197-8eb3-c46ee1bc62b1",
+          "domain_id": "6b8f402b-3fa7-42e7-8135-e9f826252499",
+          "slug": "intern_jmc",
+          "full_label": "Intern Doctors / JMC",
+          "short_label": "Intern / JMC",
+          "description": null,
+          "created_at": "2026-07-27T14:41:07.668Z"
+        }
+      ]
+    }
+  },
+  "total_rows": 23
+}

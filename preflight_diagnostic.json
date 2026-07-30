@@ -1,0 +1,1440 @@
+{
+  "schemas": [
+    "auth",
+    "extensions",
+    "graphql",
+    "graphql_public",
+    "public",
+    "realtime",
+    "storage",
+    "vault"
+  ],
+  "tables": [
+    {
+      "table_schema": "auth",
+      "table_name": "audit_log_entries",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "auth",
+      "table_name": "custom_oauth_providers",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "auth",
+      "table_name": "flow_state",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "auth",
+      "table_name": "identities",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "auth",
+      "table_name": "instances",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "auth",
+      "table_name": "mfa_amr_claims",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "auth",
+      "table_name": "mfa_challenges",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "auth",
+      "table_name": "mfa_factors",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "auth",
+      "table_name": "oauth_authorizations",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "auth",
+      "table_name": "oauth_client_states",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "auth",
+      "table_name": "oauth_clients",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "auth",
+      "table_name": "oauth_consents",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "auth",
+      "table_name": "one_time_tokens",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "auth",
+      "table_name": "refresh_tokens",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "auth",
+      "table_name": "saml_providers",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "auth",
+      "table_name": "saml_relay_states",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "auth",
+      "table_name": "schema_migrations",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "auth",
+      "table_name": "sessions",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "auth",
+      "table_name": "sso_domains",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "auth",
+      "table_name": "sso_providers",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "auth",
+      "table_name": "users",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "auth",
+      "table_name": "webauthn_challenges",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "auth",
+      "table_name": "webauthn_credentials",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "extensions",
+      "table_name": "pg_stat_statements",
+      "table_type": "VIEW"
+    },
+    {
+      "table_schema": "extensions",
+      "table_name": "pg_stat_statements_info",
+      "table_type": "VIEW"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "categories",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "content_types",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "domains",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "permissions",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "progress_status",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "role_permissions",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "roles",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "tracks",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "realtime",
+      "table_name": "messages",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "realtime",
+      "table_name": "schema_migrations",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "realtime",
+      "table_name": "subscription",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "storage",
+      "table_name": "buckets",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "storage",
+      "table_name": "buckets_analytics",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "storage",
+      "table_name": "buckets_vectors",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "storage",
+      "table_name": "migrations",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "storage",
+      "table_name": "objects",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "storage",
+      "table_name": "s3_multipart_uploads",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "storage",
+      "table_name": "s3_multipart_uploads_parts",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "storage",
+      "table_name": "vector_indexes",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "vault",
+      "table_name": "decrypted_secrets",
+      "table_type": "VIEW"
+    },
+    {
+      "table_schema": "vault",
+      "table_name": "secrets",
+      "table_type": "BASE TABLE"
+    }
+  ],
+  "publicTables": [
+    {
+      "table_name": "categories",
+      "column_count": "4"
+    },
+    {
+      "table_name": "content_types",
+      "column_count": "4"
+    },
+    {
+      "table_name": "domains",
+      "column_count": "4"
+    },
+    {
+      "table_name": "permissions",
+      "column_count": "4"
+    },
+    {
+      "table_name": "progress_status",
+      "column_count": "4"
+    },
+    {
+      "table_name": "role_permissions",
+      "column_count": "2"
+    },
+    {
+      "table_name": "roles",
+      "column_count": "4"
+    },
+    {
+      "table_name": "tracks",
+      "column_count": "7"
+    }
+  ],
+  "rlsStatus": [
+    {
+      "schemaname": "auth",
+      "tablename": "audit_log_entries",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "auth",
+      "tablename": "custom_oauth_providers",
+      "rowsecurity": false
+    },
+    {
+      "schemaname": "auth",
+      "tablename": "flow_state",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "auth",
+      "tablename": "identities",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "auth",
+      "tablename": "instances",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "auth",
+      "tablename": "mfa_amr_claims",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "auth",
+      "tablename": "mfa_challenges",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "auth",
+      "tablename": "mfa_factors",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "auth",
+      "tablename": "oauth_authorizations",
+      "rowsecurity": false
+    },
+    {
+      "schemaname": "auth",
+      "tablename": "oauth_client_states",
+      "rowsecurity": false
+    },
+    {
+      "schemaname": "auth",
+      "tablename": "oauth_clients",
+      "rowsecurity": false
+    },
+    {
+      "schemaname": "auth",
+      "tablename": "oauth_consents",
+      "rowsecurity": false
+    },
+    {
+      "schemaname": "auth",
+      "tablename": "one_time_tokens",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "auth",
+      "tablename": "refresh_tokens",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "auth",
+      "tablename": "saml_providers",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "auth",
+      "tablename": "saml_relay_states",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "auth",
+      "tablename": "schema_migrations",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "auth",
+      "tablename": "sessions",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "auth",
+      "tablename": "sso_domains",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "auth",
+      "tablename": "sso_providers",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "auth",
+      "tablename": "users",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "auth",
+      "tablename": "webauthn_challenges",
+      "rowsecurity": false
+    },
+    {
+      "schemaname": "auth",
+      "tablename": "webauthn_credentials",
+      "rowsecurity": false
+    },
+    {
+      "schemaname": "public",
+      "tablename": "categories",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "public",
+      "tablename": "content_types",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "public",
+      "tablename": "domains",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "public",
+      "tablename": "permissions",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "public",
+      "tablename": "progress_status",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "public",
+      "tablename": "role_permissions",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "public",
+      "tablename": "roles",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "public",
+      "tablename": "tracks",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "realtime",
+      "tablename": "messages",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "realtime",
+      "tablename": "schema_migrations",
+      "rowsecurity": false
+    },
+    {
+      "schemaname": "realtime",
+      "tablename": "subscription",
+      "rowsecurity": false
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "buckets",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "buckets_analytics",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "buckets_vectors",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "migrations",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "objects",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "s3_multipart_uploads",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "s3_multipart_uploads_parts",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "vector_indexes",
+      "rowsecurity": true
+    },
+    {
+      "schemaname": "vault",
+      "tablename": "secrets",
+      "rowsecurity": false
+    }
+  ],
+  "policies": [],
+  "functions": [
+    {
+      "schema": "auth",
+      "name": "email",
+      "return_type": "text"
+    },
+    {
+      "schema": "auth",
+      "name": "jwt",
+      "return_type": "jsonb"
+    },
+    {
+      "schema": "auth",
+      "name": "role",
+      "return_type": "text"
+    },
+    {
+      "schema": "auth",
+      "name": "uid",
+      "return_type": "uuid"
+    },
+    {
+      "schema": "extensions",
+      "name": "armor",
+      "return_type": "text"
+    },
+    {
+      "schema": "extensions",
+      "name": "armor",
+      "return_type": "text"
+    },
+    {
+      "schema": "extensions",
+      "name": "crypt",
+      "return_type": "text"
+    },
+    {
+      "schema": "extensions",
+      "name": "dearmor",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "extensions",
+      "name": "decrypt",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "extensions",
+      "name": "decrypt_iv",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "extensions",
+      "name": "digest",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "extensions",
+      "name": "digest",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "extensions",
+      "name": "encrypt",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "extensions",
+      "name": "encrypt_iv",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "extensions",
+      "name": "gen_random_bytes",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "extensions",
+      "name": "gen_random_uuid",
+      "return_type": "uuid"
+    },
+    {
+      "schema": "extensions",
+      "name": "gen_salt",
+      "return_type": "text"
+    },
+    {
+      "schema": "extensions",
+      "name": "gen_salt",
+      "return_type": "text"
+    },
+    {
+      "schema": "extensions",
+      "name": "grant_pg_cron_access",
+      "return_type": "event_trigger"
+    },
+    {
+      "schema": "extensions",
+      "name": "grant_pg_graphql_access",
+      "return_type": "event_trigger"
+    },
+    {
+      "schema": "extensions",
+      "name": "grant_pg_net_access",
+      "return_type": "event_trigger"
+    },
+    {
+      "schema": "extensions",
+      "name": "hmac",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "extensions",
+      "name": "hmac",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "extensions",
+      "name": "pg_stat_statements",
+      "return_type": "SETOF record"
+    },
+    {
+      "schema": "extensions",
+      "name": "pg_stat_statements_info",
+      "return_type": "record"
+    },
+    {
+      "schema": "extensions",
+      "name": "pg_stat_statements_reset",
+      "return_type": "timestamp with time zone"
+    },
+    {
+      "schema": "extensions",
+      "name": "pgp_armor_headers",
+      "return_type": "SETOF record"
+    },
+    {
+      "schema": "extensions",
+      "name": "pgp_key_id",
+      "return_type": "text"
+    },
+    {
+      "schema": "extensions",
+      "name": "pgp_pub_decrypt",
+      "return_type": "text"
+    },
+    {
+      "schema": "extensions",
+      "name": "pgp_pub_decrypt",
+      "return_type": "text"
+    },
+    {
+      "schema": "extensions",
+      "name": "pgp_pub_decrypt",
+      "return_type": "text"
+    },
+    {
+      "schema": "extensions",
+      "name": "pgp_pub_decrypt_bytea",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "extensions",
+      "name": "pgp_pub_decrypt_bytea",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "extensions",
+      "name": "pgp_pub_decrypt_bytea",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "extensions",
+      "name": "pgp_pub_encrypt",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "extensions",
+      "name": "pgp_pub_encrypt",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "extensions",
+      "name": "pgp_pub_encrypt_bytea",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "extensions",
+      "name": "pgp_pub_encrypt_bytea",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "extensions",
+      "name": "pgp_sym_decrypt",
+      "return_type": "text"
+    },
+    {
+      "schema": "extensions",
+      "name": "pgp_sym_decrypt",
+      "return_type": "text"
+    },
+    {
+      "schema": "extensions",
+      "name": "pgp_sym_decrypt_bytea",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "extensions",
+      "name": "pgp_sym_decrypt_bytea",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "extensions",
+      "name": "pgp_sym_encrypt",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "extensions",
+      "name": "pgp_sym_encrypt",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "extensions",
+      "name": "pgp_sym_encrypt_bytea",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "extensions",
+      "name": "pgp_sym_encrypt_bytea",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "extensions",
+      "name": "pgrst_ddl_watch",
+      "return_type": "event_trigger"
+    },
+    {
+      "schema": "extensions",
+      "name": "pgrst_drop_watch",
+      "return_type": "event_trigger"
+    },
+    {
+      "schema": "extensions",
+      "name": "set_graphql_placeholder",
+      "return_type": "event_trigger"
+    },
+    {
+      "schema": "extensions",
+      "name": "uuid_generate_v1",
+      "return_type": "uuid"
+    },
+    {
+      "schema": "extensions",
+      "name": "uuid_generate_v1mc",
+      "return_type": "uuid"
+    },
+    {
+      "schema": "extensions",
+      "name": "uuid_generate_v3",
+      "return_type": "uuid"
+    },
+    {
+      "schema": "extensions",
+      "name": "uuid_generate_v4",
+      "return_type": "uuid"
+    },
+    {
+      "schema": "extensions",
+      "name": "uuid_generate_v5",
+      "return_type": "uuid"
+    },
+    {
+      "schema": "extensions",
+      "name": "uuid_nil",
+      "return_type": "uuid"
+    },
+    {
+      "schema": "extensions",
+      "name": "uuid_ns_dns",
+      "return_type": "uuid"
+    },
+    {
+      "schema": "extensions",
+      "name": "uuid_ns_oid",
+      "return_type": "uuid"
+    },
+    {
+      "schema": "extensions",
+      "name": "uuid_ns_url",
+      "return_type": "uuid"
+    },
+    {
+      "schema": "extensions",
+      "name": "uuid_ns_x500",
+      "return_type": "uuid"
+    },
+    {
+      "schema": "graphql_public",
+      "name": "graphql",
+      "return_type": "jsonb"
+    },
+    {
+      "schema": "pgbouncer",
+      "name": "get_auth",
+      "return_type": "TABLE(username text, password text)"
+    },
+    {
+      "schema": "realtime",
+      "name": "apply_rls",
+      "return_type": "SETOF realtime.wal_rls"
+    },
+    {
+      "schema": "realtime",
+      "name": "broadcast_changes",
+      "return_type": "void"
+    },
+    {
+      "schema": "realtime",
+      "name": "build_prepared_statement_sql",
+      "return_type": "text"
+    },
+    {
+      "schema": "realtime",
+      "name": "cast",
+      "return_type": "jsonb"
+    },
+    {
+      "schema": "realtime",
+      "name": "check_equality_op",
+      "return_type": "boolean"
+    },
+    {
+      "schema": "realtime",
+      "name": "check_equality_op",
+      "return_type": "boolean"
+    },
+    {
+      "schema": "realtime",
+      "name": "is_visible_through_filters",
+      "return_type": "boolean"
+    },
+    {
+      "schema": "realtime",
+      "name": "list_changes",
+      "return_type": "TABLE(wal jsonb, is_rls_enabled boolean, subscription_ids uuid[], errors text[], slot_changes_count bigint)"
+    },
+    {
+      "schema": "realtime",
+      "name": "quote_wal2json",
+      "return_type": "text"
+    },
+    {
+      "schema": "realtime",
+      "name": "send",
+      "return_type": "void"
+    },
+    {
+      "schema": "realtime",
+      "name": "send_binary",
+      "return_type": "void"
+    },
+    {
+      "schema": "realtime",
+      "name": "subscription_check_filters",
+      "return_type": "trigger"
+    },
+    {
+      "schema": "realtime",
+      "name": "to_regrole",
+      "return_type": "regrole"
+    },
+    {
+      "schema": "realtime",
+      "name": "topic",
+      "return_type": "text"
+    },
+    {
+      "schema": "realtime",
+      "name": "wal2json_escape_identifier",
+      "return_type": "text"
+    },
+    {
+      "schema": "storage",
+      "name": "allow_any_operation",
+      "return_type": "boolean"
+    },
+    {
+      "schema": "storage",
+      "name": "allow_only_operation",
+      "return_type": "boolean"
+    },
+    {
+      "schema": "storage",
+      "name": "can_insert_object",
+      "return_type": "void"
+    },
+    {
+      "schema": "storage",
+      "name": "enforce_bucket_name_length",
+      "return_type": "trigger"
+    },
+    {
+      "schema": "storage",
+      "name": "extension",
+      "return_type": "text"
+    },
+    {
+      "schema": "storage",
+      "name": "filename",
+      "return_type": "text"
+    },
+    {
+      "schema": "storage",
+      "name": "foldername",
+      "return_type": "text[]"
+    },
+    {
+      "schema": "storage",
+      "name": "get_common_prefix",
+      "return_type": "text"
+    },
+    {
+      "schema": "storage",
+      "name": "get_size_by_bucket",
+      "return_type": "TABLE(size bigint, bucket_id text)"
+    },
+    {
+      "schema": "storage",
+      "name": "list_multipart_uploads_with_delimiter",
+      "return_type": "TABLE(key text, id text, created_at timestamp with time zone)"
+    },
+    {
+      "schema": "storage",
+      "name": "list_objects_with_delimiter",
+      "return_type": "TABLE(name text, id uuid, metadata jsonb, updated_at timestamp with time zone, created_at timestamp with time zone, last_accessed_at timestamp with time zone)"
+    },
+    {
+      "schema": "storage",
+      "name": "operation",
+      "return_type": "text"
+    },
+    {
+      "schema": "storage",
+      "name": "protect_delete",
+      "return_type": "trigger"
+    },
+    {
+      "schema": "storage",
+      "name": "search",
+      "return_type": "TABLE(name text, id uuid, updated_at timestamp with time zone, created_at timestamp with time zone, last_accessed_at timestamp with time zone, metadata jsonb)"
+    },
+    {
+      "schema": "storage",
+      "name": "search_by_timestamp",
+      "return_type": "TABLE(key text, name text, id uuid, updated_at timestamp with time zone, created_at timestamp with time zone, last_accessed_at timestamp with time zone, metadata jsonb)"
+    },
+    {
+      "schema": "storage",
+      "name": "search_v2",
+      "return_type": "TABLE(key text, name text, id uuid, updated_at timestamp with time zone, created_at timestamp with time zone, last_accessed_at timestamp with time zone, metadata jsonb)"
+    },
+    {
+      "schema": "storage",
+      "name": "update_updated_at_column",
+      "return_type": "trigger"
+    },
+    {
+      "schema": "vault",
+      "name": "_crypto_aead_det_decrypt",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "vault",
+      "name": "_crypto_aead_det_encrypt",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "vault",
+      "name": "_crypto_aead_det_noncegen",
+      "return_type": "bytea"
+    },
+    {
+      "schema": "vault",
+      "name": "create_secret",
+      "return_type": "uuid"
+    },
+    {
+      "schema": "vault",
+      "name": "update_secret",
+      "return_type": "void"
+    }
+  ],
+  "triggers": [
+    {
+      "event_object_schema": "realtime",
+      "event_object_table": "subscription",
+      "trigger_name": "tr_check_filters",
+      "event_manipulation": "INSERT",
+      "action_timing": "BEFORE"
+    },
+    {
+      "event_object_schema": "realtime",
+      "event_object_table": "subscription",
+      "trigger_name": "tr_check_filters",
+      "event_manipulation": "UPDATE",
+      "action_timing": "BEFORE"
+    },
+    {
+      "event_object_schema": "storage",
+      "event_object_table": "buckets",
+      "trigger_name": "enforce_bucket_name_length_trigger",
+      "event_manipulation": "INSERT",
+      "action_timing": "BEFORE"
+    },
+    {
+      "event_object_schema": "storage",
+      "event_object_table": "buckets",
+      "trigger_name": "enforce_bucket_name_length_trigger",
+      "event_manipulation": "UPDATE",
+      "action_timing": "BEFORE"
+    },
+    {
+      "event_object_schema": "storage",
+      "event_object_table": "buckets",
+      "trigger_name": "protect_buckets_delete",
+      "event_manipulation": "DELETE",
+      "action_timing": "BEFORE"
+    },
+    {
+      "event_object_schema": "storage",
+      "event_object_table": "objects",
+      "trigger_name": "protect_objects_delete",
+      "event_manipulation": "DELETE",
+      "action_timing": "BEFORE"
+    },
+    {
+      "event_object_schema": "storage",
+      "event_object_table": "objects",
+      "trigger_name": "update_objects_updated_at",
+      "event_manipulation": "UPDATE",
+      "action_timing": "BEFORE"
+    }
+  ],
+  "extensions": [
+    {
+      "extname": "pg_stat_statements",
+      "extversion": "1.11"
+    },
+    {
+      "extname": "pgcrypto",
+      "extversion": "1.3"
+    },
+    {
+      "extname": "plpgsql",
+      "extversion": "1.0"
+    },
+    {
+      "extname": "supabase_vault",
+      "extversion": "0.3.1"
+    },
+    {
+      "extname": "uuid-ossp",
+      "extversion": "1.1"
+    }
+  ],
+  "foreignKeys": [
+    {
+      "table_name": "categories",
+      "constraint_name": "categories_domain_id_fkey",
+      "column_name": "domain_id",
+      "foreign_table": "domains",
+      "foreign_column": "id",
+      "delete_rule": "CASCADE"
+    },
+    {
+      "table_name": "role_permissions",
+      "constraint_name": "role_permissions_permission_id_fkey",
+      "column_name": "permission_id",
+      "foreign_table": "permissions",
+      "foreign_column": "id",
+      "delete_rule": "CASCADE"
+    },
+    {
+      "table_name": "role_permissions",
+      "constraint_name": "role_permissions_role_id_fkey",
+      "column_name": "role_id",
+      "foreign_table": "roles",
+      "foreign_column": "id",
+      "delete_rule": "CASCADE"
+    },
+    {
+      "table_name": "tracks",
+      "constraint_name": "tracks_domain_id_fkey",
+      "column_name": "domain_id",
+      "foreign_table": "domains",
+      "foreign_column": "id",
+      "delete_rule": "CASCADE"
+    }
+  ],
+  "prismaMigrations": {
+    "error": "relation \"_prisma_migrations\" does not exist"
+  },
+  "indexes": [
+    {
+      "tablename": "content_types",
+      "indexname": "content_types_name_key"
+    },
+    {
+      "tablename": "domains",
+      "indexname": "domains_name_key"
+    },
+    {
+      "tablename": "permissions",
+      "indexname": "permissions_name_key"
+    },
+    {
+      "tablename": "progress_status",
+      "indexname": "progress_status_key_key"
+    },
+    {
+      "tablename": "roles",
+      "indexname": "roles_name_key"
+    },
+    {
+      "tablename": "tracks",
+      "indexname": "tracks_slug_key"
+    }
+  ],
+  "enums": [
+    {
+      "schema": "auth",
+      "enum_name": "aal_level"
+    },
+    {
+      "schema": "auth",
+      "enum_name": "code_challenge_method"
+    },
+    {
+      "schema": "auth",
+      "enum_name": "factor_status"
+    },
+    {
+      "schema": "auth",
+      "enum_name": "factor_type"
+    },
+    {
+      "schema": "auth",
+      "enum_name": "oauth_authorization_status"
+    },
+    {
+      "schema": "auth",
+      "enum_name": "oauth_client_type"
+    },
+    {
+      "schema": "auth",
+      "enum_name": "oauth_registration_type"
+    },
+    {
+      "schema": "auth",
+      "enum_name": "oauth_response_type"
+    },
+    {
+      "schema": "auth",
+      "enum_name": "one_time_token_type"
+    },
+    {
+      "schema": "realtime",
+      "enum_name": "action"
+    },
+    {
+      "schema": "realtime",
+      "enum_name": "equality_op"
+    },
+    {
+      "schema": "storage",
+      "enum_name": "buckettype"
+    }
+  ],
+  "columns": [
+    {
+      "table_name": "categories",
+      "column_name": "id",
+      "data_type": "uuid",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": "uuid_generate_v4()"
+    },
+    {
+      "table_name": "categories",
+      "column_name": "domain_id",
+      "data_type": "uuid",
+      "udt_name": "uuid",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "categories",
+      "column_name": "name",
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "categories",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "udt_name": "timestamptz",
+      "is_nullable": "YES",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "content_types",
+      "column_name": "id",
+      "data_type": "uuid",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": "uuid_generate_v4()"
+    },
+    {
+      "table_name": "content_types",
+      "column_name": "name",
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "content_types",
+      "column_name": "description",
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "content_types",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "udt_name": "timestamptz",
+      "is_nullable": "YES",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "domains",
+      "column_name": "id",
+      "data_type": "uuid",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": "uuid_generate_v4()"
+    },
+    {
+      "table_name": "domains",
+      "column_name": "name",
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "domains",
+      "column_name": "description",
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "domains",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "udt_name": "timestamptz",
+      "is_nullable": "YES",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "permissions",
+      "column_name": "id",
+      "data_type": "uuid",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": "uuid_generate_v4()"
+    },
+    {
+      "table_name": "permissions",
+      "column_name": "name",
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "permissions",
+      "column_name": "description",
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "permissions",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "udt_name": "timestamptz",
+      "is_nullable": "YES",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "progress_status",
+      "column_name": "id",
+      "data_type": "uuid",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": "uuid_generate_v4()"
+    },
+    {
+      "table_name": "progress_status",
+      "column_name": "key",
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "progress_status",
+      "column_name": "label",
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "progress_status",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "udt_name": "timestamptz",
+      "is_nullable": "YES",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "role_permissions",
+      "column_name": "role_id",
+      "data_type": "uuid",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "role_permissions",
+      "column_name": "permission_id",
+      "data_type": "uuid",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "roles",
+      "column_name": "id",
+      "data_type": "uuid",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": "uuid_generate_v4()"
+    },
+    {
+      "table_name": "roles",
+      "column_name": "name",
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "roles",
+      "column_name": "description",
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "roles",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "udt_name": "timestamptz",
+      "is_nullable": "YES",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "tracks",
+      "column_name": "id",
+      "data_type": "uuid",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": "uuid_generate_v4()"
+    },
+    {
+      "table_name": "tracks",
+      "column_name": "domain_id",
+      "data_type": "uuid",
+      "udt_name": "uuid",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "tracks",
+      "column_name": "slug",
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "tracks",
+      "column_name": "full_label",
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "tracks",
+      "column_name": "short_label",
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "tracks",
+      "column_name": "description",
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "tracks",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "udt_name": "timestamptz",
+      "is_nullable": "YES",
+      "column_default": "now()"
+    }
+  ]
+}
